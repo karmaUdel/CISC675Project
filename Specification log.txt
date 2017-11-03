@@ -1,0 +1,21 @@
+===================================================================================================
+Modification on Nov.3:
+
+I. Added or revised items:
+1."Services Offered":
+  (1).Replace "Hardware access" with "Access for users".
+  (2).Replace all "Lift" with "Elevator" as it is required from Dr. Siegel.
+  (3).Revise the floor and elevator description in "Service Offered".
+  (4).Add the responsibility of simulator in "Access for users".
+  (5).Add the requirement for buttons of the top floor and the buttom floor in "General rules".
+
+II. Removed items:
+1."Services Offered":
+  (1).Remove "open door","clsoe door","enter","stop" in "Access for users".
+  (2).Remove "failure exception handler" in "General Rules".
+  (3).Remove "Using Elevator" in "Access for users".
+
+III. Future modifications:
+  (1).Define the term "Users" and "Drivers".
+  (2).Define the reponsibility of all modules.(Or just copy from the primary design)
+  (3).We need to build both internal and exteranl buttons. 
