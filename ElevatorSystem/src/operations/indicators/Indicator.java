@@ -15,6 +15,7 @@ public class Indicator implements IIndicator {
 	@Override
 	public int atFloor(int liftId) {
 		// TODO Auto-generated method stub
+		
 		return 0;
 	}
 

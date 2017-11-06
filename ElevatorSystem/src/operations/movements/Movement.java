@@ -13,10 +13,12 @@ import elevatorunit.motors.Motor;
 public class Movement implements IMovement {
 	
 	IMotor motor;
+	int liftmap[];
 	public Movement() {
 		// TODO Auto-generated constructor stub
 		super();
 		motor = new Motor();
+		liftmap = new int [100];
 	}
 	/* (non-Javadoc)
 	 * @see operations.movements.IMovement#moveUp(int)
@@ -36,7 +38,11 @@ public class Movement implements IMovement {
 	public int moveDown(int liftId) {
 		// TODO Auto-generated method stub
 		motor.beginMotor(liftId);
-		return 0;
+		if (liftmap[liftId] == 0){
+			return 0;// floor is at floor 0
+		}
+		else
+			return liftmap[liftId];
 	}
 
 	/* (non-Javadoc)
