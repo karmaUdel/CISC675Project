@@ -7,7 +7,8 @@ package elevator;
 // TODO: Consider what else is needed  
 
 public class Test 
-{
+{	
+	// Reset the status of the elevator to be at the initial state
 	public void reset_elevator(Elevator testele)
 	{
 		testele.isdooropen = false;
@@ -23,6 +24,7 @@ public class Test
 		testele.isinbuttonlit[i] = false;}
 	}
 	
+	// Show the status of the elevator unit
 	public void showstats(Elevator testele)
 	{
 		if(testele.isdooropen == false)
@@ -86,22 +88,26 @@ public class Test
 		Test test1 = new Test();
 		int maxfloornumber = 5;
 		Elevator testele = new Elevator();
-		testele.initialize_elevator(maxfloornumber);
 		
+		// Initial state
 		System.out.println("Initial state:");
+		testele.initialize_elevator(maxfloornumber);	
 		test1.showstats(testele);
 		
+		// Randomly change some status of the elevator
+		System.out.println("Randomtest 1:");
 		testele.opendoor();
 		testele.moveup();
 		testele.pressinbutton(1);
 		testele.pressinbutton(4);
-		System.out.println("Randomtest 1:");
 		test1.showstats(testele);
 		
-		test1.reset_elevator(testele);
+		// Reset the elevator status. Notice that reset will not change the maximum floor of this elevator!
 		System.out.println("Reset:");
+		test1.reset_elevator(testele);
 		test1.showstats(testele);
 		
+		// A toy example of how can an elevator move from floor 0 to floor3
 		System.out.println("Example: At initial state, receive a request(in or out) for floor3:");
 		System.out.println("phase1: receive the request signal, close the door:");
 		testele.receive_req(3);
