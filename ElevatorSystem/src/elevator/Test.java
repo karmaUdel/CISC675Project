@@ -17,8 +17,10 @@ public class Test
 		testele.ismovingdown = false; 
 
 		testele.current_floor = 0;
-		testele.destination = 0;
-		testele.request_floor = 0;
+		testele.destination = testele.no_destination;
+		testele.request_floor = testele.no_request;
+		testele.ext_request = testele.no_request;
+		testele.int_request = testele.no_request;
 		
 		for(int i = 0; i<testele.inbutton_num; i++){
 		testele.isinbuttonlit[i] = false;}
@@ -67,6 +69,7 @@ public class Test
 		System.out.println("destination:" + testele.destination);
 		System.out.println("maxfloorindex:" + testele.maxfloorindex);
 		System.out.println("request_floor:" + testele.request_floor);
+		System.out.println("internal_request:" + testele.int_request);
 		
 		System.out.println("inbutton_num:" + testele.inbutton_num);
 		for (int i = 0; i<testele.inbutton_num;i++)
@@ -107,7 +110,7 @@ public class Test
 		test1.reset_elevator(testele);
 		test1.showstats(testele);
 		
-		// A toy example of how can an elevator move from floor 0 to floor3
+		// A toy example of how can an elevator move from floor0 to floor3 
 		System.out.println("Example: At initial state, receive a request(in or out) for floor3:");
 		System.out.println("phase1: receive the request signal, close the door:");
 		testele.receive_req(3);
@@ -121,6 +124,14 @@ public class Test
 		testele.shutmotor();
 		testele.opendoor();
 		test1.showstats(testele);
+		
+		// A toy example of how to use internal request(by pushing inbuttons) to move from floor3 to floor1
+		test1.reset_elevator(testele);
+		System.out.println("Example: At floor 3, receive a internal request to get to floor 1");
+		testele.current_floor = 3;
+		testele.closedoor();
+		testele.pressinbutton(1);
+		testele.receive_req(testele.int_request);	
 	}
 	
 }

@@ -7,7 +7,7 @@ import elevatorunit.motors.IMotor;
 import elevatorunit.motors.Motor;
 
 /**
- * @author Aditya
+ * @author Zheyuan Liu
  *
  */
 public class Movement implements IMovement {
@@ -18,7 +18,7 @@ public class Movement implements IMovement {
 	int req_floor;
 	
 	public Movement(int liftId,int req_floor) {
-		// TODO Auto-generated constructor stub
+
 		super();
 		motor = new Motor();
 		if (liftmap[liftId]< req_floor)
@@ -40,7 +40,6 @@ public class Movement implements IMovement {
 	 */
 	@Override
 	public int moveUp(int liftId, int req_floor) {
-		// TODO Auto-generated method stub
 		motor.beginMotor(liftId);
 		if (liftmap[liftId] == maxfloor){
 			return maxfloor;//floor is at top floor
@@ -63,7 +62,6 @@ public class Movement implements IMovement {
 	 */
 	@Override
 	public int moveDown(int liftId, int req_floor) {
-		// TODO Auto-generated method stub
 		motor.beginMotor(liftId);
 		if (liftmap[liftId] == 0){
 			return 0;// floor is at floor 0
@@ -87,7 +85,7 @@ public class Movement implements IMovement {
 	 */
 	@Override
 	public int stop(int liftId) {
-		// TODO Auto-generated method stub
+		
 		motor.shutMotor(liftId);
 		return liftmap[liftId];
 	}
