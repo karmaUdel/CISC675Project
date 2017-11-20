@@ -15,7 +15,19 @@ public class Simulator {
 	private Scheduler scheduler; // scheduler 
     private int numberOfFloors; // how many floors building has
     private int numberOfElevators; // how many elevators building has
-    public AtomicIntegerArray elevatorPosition; // position map for every elevator
+    public int getNumberOfElevators() {
+		return numberOfElevators;
+	}
+	public void setNumberOfElevators(int numberOfElevators) {
+		this.numberOfElevators = numberOfElevators;
+	}
+	public AtomicIntegerArray getElevatorPosition() {
+		return elevatorPosition;
+	}
+	public void setElevatorPosition(AtomicIntegerArray elevatorPosition) {
+		this.elevatorPosition = elevatorPosition;
+	}
+	public AtomicIntegerArray elevatorPosition; // position map for every elevator
     public AtomicIntegerArray requestFromFloor; // position of request received it toggles 0-1 
     public AtomicIntegerArray destinationOfElevator; // destination of elevator which is motion
     // TODO data structure which stores all entered location for lift 
