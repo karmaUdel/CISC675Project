@@ -146,5 +146,12 @@ public class ElevatorThread extends Thread {
 		this.direction = direction;
 		this.elevatorId = count++;
 	}
+	public boolean isMoving() {
+		if(this.getDirection()==0) {
+			return false;
+		}else {
+			return true;
+		}
+	}
 
 }
