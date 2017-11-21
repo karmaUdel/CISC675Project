@@ -21,7 +21,7 @@ public class Test
 		testele.request_floor = testele.no_request;
 		testele.ext_request = testele.no_request;
 		testele.int_request = testele.no_request;
-		
+		 
 		for(int i = 0; i<testele.inbutton_num; i++){
 		testele.isinbuttonlit[i] = false;}
 	}
