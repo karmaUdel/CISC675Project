@@ -1,0 +1,32 @@
+.bottompane {
+    -fx-background-color: #8fbc8f;
+}
+
+.button {
+	-fx-background-color: #30ff31;
+}
+
+.buttonlit{
+	-fx-background-color: #ffff00;
+}
+
+.floorpane {
+    -fx-background-color: #a9a9a9;
+}
+
+.floorspane {
+    -fx-border-style: solid inside;
+    -fx-border-width: 2;
+    -fx-border-insets: 2;
+    -fx-border-radius: 2;
+    -fx-border-color: #000000;
+}
+
+.onefloor{
+	-fx-background-color: #00ffff;
+}
+.elevatorpane {
+    -fx-background-color: #f5f5dc;
+}
+
+.my-rect { -fx-fill: red; }
