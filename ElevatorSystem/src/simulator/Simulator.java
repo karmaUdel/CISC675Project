@@ -14,7 +14,13 @@ public class Simulator {
 	
 	private Scheduler scheduler; // scheduler 
     private int numberOfFloors; // how many floors building has
-    private int numberOfElevators; // how many elevators building has
+    public int getNumberOfFloors() {
+		return numberOfFloors;
+	}
+	public void setNumberOfFloors(int numberOfFloors) {
+		this.numberOfFloors = numberOfFloors;
+	}
+	private int numberOfElevators; // how many elevators building has
     public int getNumberOfElevators() {
 		return numberOfElevators;
 	}

@@ -3,6 +3,8 @@
  */
 package simulator;
 
+import gui_learning.Main;
+
 /**
  * @author Aditya Karmarkar
  * Job : Implements multiple schedules
@@ -13,14 +15,16 @@ public class Scheduler {
     private ElevatorThread elevators [];
     private Simulator simulatorValues;
     private Schedule scheduleSelected;
+    private Main gui;
     /**
      * Default Constructor
      */
     public Scheduler() {
     	super();
-    	simulatorValues = new Simulator();
+    	this.simulatorValues = new Simulator();
 		this.elevators = new ElevatorThread[simulatorValues.getNumberOfElevators()];
-		scheduleSelected = new Schedule();
+		this.scheduleSelected = new Schedule();
+		this.gui = new Main(simulatorValues.getNumberOfFloors(), simulatorValues.getNumberOfElevators());
     }
 	/**
 	 * @param values
@@ -31,6 +35,7 @@ public class Scheduler {
 		// make threads
 		this.createThreads();
 		// call gui
+		this.gui.initiate(null);
 		// connect thread to gui
 		// schedule stuff
 		

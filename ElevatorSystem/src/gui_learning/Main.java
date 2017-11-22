@@ -20,20 +20,53 @@ import javafx.stage.Stage;
 
 
 public class Main extends Application {
- 
+ /**
+  * Default Constructor
+  */
+    public Main() {
+		super();
+		elevatornum = 5;
+		floornum = 10;
+		elevatorpaneheight = 200;
+		elevatorpanewidth = 1600;
+		floorpaneheight = 700;
+		floorpanewidth = 200;
+		Stagewidth = 1800;
+		Stageheight = 900;
+
+	}
     /**
+     * @param numberOfFloors
+     * @param numberOfElevators
+     * Specialized constructor
+     */
+    public Main(int numberOfFloors, int numberOfElevators) {
+		super();
+		elevatornum = numberOfElevators;
+		floornum = numberOfFloors;
+		elevatorpaneheight = 200;
+		elevatorpanewidth = 1600;
+		floorpaneheight = 700;
+		floorpanewidth = 200;
+		Stagewidth = 1800;
+		Stageheight = 900;    	
+    }
+
+	/**
      * @param args the command line arguments
      */
-	private final int elevatornum = 5;
-	private final int floornum = 10;
-	private final double elevatorpaneheight = 200;
-	private final double elevatorpanewidth = 1600;
-	private final double floorpaneheight = 700;
-	private final double floorpanewidth = 200;
-	private final double Stagewidth = 1800;
-	private final double Stageheight = 900;
+	private  int elevatornum ;
+	private  int floornum;
+	private  double elevatorpaneheight ;
+	private  double elevatorpanewidth ;
+	private  double floorpaneheight ;
+	private  double floorpanewidth ;
+	private  double Stagewidth ;
+	private  double Stageheight ;
 	
-	EventHandler handler = new EventHandler() {
+	
+	
+	EventHandler floorButtonsHandler = new EventHandler() {
            
 
 		@Override
@@ -56,11 +89,39 @@ public class Main extends Application {
           	
               event.consume();
 		}};
-           
+
+		EventHandler elevatorButtonsHandler = new EventHandler() {
+			@Override
+			public void handle(Event event) {
+				// TODO Auto-generated method stub
+				Button b =(Button)event.getSource();//.getStyleClass().removeAll("button, focus"); 
+	              //In this way you're sure you have no styles applied to your object button
+	          	String s = b.getText();
+	          	String id = b.getId();
+	          	String[] splittedId= id.split("_"); // id is of form #elevatorId_#buttonId
+	          	int elevatorId = Integer.parseInt(splittedId[0]);
+	          	int buttonId = Integer.parseInt(splittedId[1]);
+	          	//System.out.println(event);
+	          	if("Up".equalsIgnoreCase(s)){
+	          		//up clicked
+	          	    System.out.println(elevatorId);
+	          	    System.out.println(buttonId);
+	          	}else{
+	          		//down clicked
+	          		System.out.println(elevatorId);
+	          		System.out.println(buttonId);
+	          	}
+	          	
+	              event.consume();
+			}};
+
     public static void main(String[] args) {
-        Application.launch(args);
+    	Main app = new Main();
+    	app.initiate(args);
     }
-    
+    public void initiate(String[] args) {
+    	Application.launch(args);
+    }
     @Override
     public void start(Stage primaryStage)throws Exception {
     	
@@ -74,11 +135,6 @@ public class Main extends Application {
         BottomPane.setLeft(FloorPane);
         BottomPane.setBottom(ElevatorPane);
         
-        
-        
-        Button btest2 = new Button("elevatorpanetest");
-        btest2.setPrefSize(80, 20);
-        
         Button[] floorbuttons = new Button[floornum*2];
         for(int i=0; i<floornum*2;i=i+2)
         {
@@ -88,42 +144,13 @@ public class Main extends Application {
         	floorbuttons[i+1].setMaxHeight((floorpaneheight/floornum)/20);
         	floorbuttons[i].setText("Up");
         	floorbuttons[i].setId(i+"");
-        	floorbuttons[i].setOnAction(handler);
+        	floorbuttons[i].setOnAction(floorButtonsHandler);
         	floorbuttons[i+1].setText("Down");
         	floorbuttons[i+1].setId((i+1)+""); 
-        	floorbuttons[i+1].setOnAction(handler);
+        	floorbuttons[i+1].setOnAction(floorButtonsHandler);
         	
         }
-        
-     
-            
-/*    	floorbuttons[1].setOnAction((ActionEvent e) -> {
-         	Button b =(Button)e.getSource();//.getStyleClass().removeAll("button, focus"); 
-             //In this way you're sure you have no styles applied to your object button
-         	String s = b.getText();
-         	String id = b.getId();
-         	int idint = Integer.parseInt(id);
-         	System.out.println(e);
-         	if("Up".equalsIgnoreCase(s)){
-         		//up clicked
-         	    System.out.println(idint);
-         	    
-         	}else{
-         		//down clicked
-         		System.out.println(idint);
-         	}
-         	
-         	//floorbuttons[1].getStyleClass().add("buttonlit");
-             //then you specify the class you would give to the button
-         });
-        
-        floorbuttons[2].setOnAction((ActionEvent e) -> {
-        	floorbuttons[1].getStyleClass().removeAll("button, focus"); 
-            //In this way you're sure you have no styles applied to your object button
-        	floorbuttons[2].getStyleClass().add("buttonlit");
-            //then you specify the class you would give to the button
-        });
-        */
+
         VBox[] floorspane = new VBox[floornum];
         for (int i=0; i<floornum;i++)
         {
@@ -136,9 +163,6 @@ public class Main extends Application {
         	floorspane[i].getStyleClass().add("floorspane"); 
         	FloorPane.getChildren().add(floorspane[i]);      	
         }
-        
-        
-        ElevatorPane.getChildren().add(btest2);
         
         Scene scene = new Scene(BottomPane, Stagewidth, Stageheight);
         scene.getStylesheets().add("gui_learning/application.css");
