@@ -71,12 +71,14 @@ public class FXMLWriter {
 			Element buttonUp = doc.createElement("button");
 			Element buttonDown = doc.createElement("button");
 				buttonUp.setAttribute("text", "Up");
+				buttonUp.setAttribute("fx:id", "UP_"+(i+1));			 	
 			 	pos = i *20;
 			 	buttonUp.setAttribute("AnchorPane.topAnchor", ""+pos);
 			 	buttonUp.setAttribute("AnchorPane.leftAnchor", ""+0);
 			 	buttonUp.setAttribute("AnchorPane.rightAnchor", ""+0);
 			 	buttonDown.setAttribute("text", "Down");
 			 	pos = pos+10;
+				buttonDown.setAttribute("fx:id", "Do_"+(i+1));			 	
 			 	buttonDown.setAttribute("AnchorPane.topAnchor", ""+pos);
 			 	buttonDown.setAttribute("AnchorPane.leftAnchor", ""+0);
 			 	buttonDown.setAttribute("AnchorPane.rightAnchor", ""+0);
@@ -106,11 +108,13 @@ public class FXMLWriter {
 				Element buttonRight = doc.createElement("button");
 				buttonLeft.setAttribute("text", ""+((j*2)+1));
 				 	pos =1000+ j *20;
+				 	buttonLeft.setAttribute("fx:id", "LE_"+(j+1));			 	
 				 	buttonLeft.setAttribute("Pane.topAnchor", ""+pos);
 				 	buttonLeft.setAttribute("Pane.leftAnchor", ""+0);
 				 	buttonLeft.setAttribute("Pane.rightAnchor", ""+0);
 				 	buttonRight.setAttribute("text", ""+((j*2)+2));
 				 	pos = pos+10;
+				 	buttonRight.setAttribute("fx:id", "RI_"+(j+2));			 	
 				 	buttonRight.setAttribute("Pane.topAnchor", ""+pos);
 				 	buttonRight.setAttribute("Pane.leftAnchor", ""+0);
 				 	buttonRight.setAttribute("Pane.rightAnchor", ""+0);
