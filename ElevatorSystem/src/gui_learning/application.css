@@ -2,8 +2,15 @@
     -fx-background-color: #8fbc8f;
 }
 
-.button {
+.floorbutton {
 	-fx-background-color: #30ff31;
+	-fx-font: 10 arial;
+}
+
+.elevatorbutton{
+	-fx-background-radius: 7em;
+	-fx-background-color:#ff0000;
+	 
 }
 
 .buttonlit{
@@ -20,6 +27,7 @@
     -fx-border-insets: 2;
     -fx-border-radius: 2;
     -fx-border-color: #000000;
+    -fx-spacing: 10;
 }
 
 .onefloor{
@@ -27,6 +35,14 @@
 }
 .elevatorpane {
     -fx-background-color: #f5f5dc;
+}
+
+.elevatorspane {
+	-fx-border-style: solid inside;
+    -fx-border-width: 2;
+    -fx-border-insets: 2;
+    -fx-border-radius: 2;
+    -fx-border-color: #000000;
 }
 
 .my-rect { -fx-fill: red; }
