@@ -166,6 +166,7 @@ public class Main extends Application {
         	{
         		elevatorbutton[i][j] = new Button();
         		elevatorbutton[i][j].setShape(new Circle((elevatorpanewidth/elevatornum)/20));
+        		elevatorbutton[i][j].getStyleClass().add("elevatorbutton");
         		elevatorbutton[i][j].setMinSize(2*(elevatorpanewidth/elevatornum)/20, 2*(elevatorpanewidth/elevatornum)/20);
         		elevatorbutton[i][j].setMaxSize(2*(elevatorpanewidth/elevatornum)/20, 2*(elevatorpanewidth/elevatornum)/20);
         		elevatorbutton[i][j].setText(j+"");
