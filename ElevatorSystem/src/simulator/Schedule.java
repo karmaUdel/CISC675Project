@@ -23,7 +23,8 @@ public class Schedule {
 	 * @param schedulerObject
 	 */
 	public Schedule(Scheduler schedulerObject) {
-		
+		super();
+		this.elevators = schedulerObject.getElevators(); 
 	}
 	
 	/**

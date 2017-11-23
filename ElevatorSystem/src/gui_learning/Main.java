@@ -22,21 +22,56 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import simulator.Scheduler;
 
 
 public class Main extends Application {
- 
-    /**
-     * @param args the command line arguments
-     */
-	private final int elevatornum = 5;
-	private final int floornum = 5;
-	private final double elevatorpaneheight = 200;
-	private final double elevatorpanewidth = 1600;
-	private final double floorpaneheight = 700;
-	private final double floorpanewidth = 200;
-	private final double Stagewidth = 1800;
-	private final double Stageheight = 900;
+	 /**
+	  * Default Constructor
+	  */
+	    public Main() {
+			super();
+			this.scheduler = new Scheduler();
+			this.elevatornum = 5;
+			this.floornum = 10;
+			this.elevatorpaneheight = 200;
+			this.elevatorpanewidth = 1600;
+			this.floorpaneheight = 700;
+			this.floorpanewidth = 200;
+			this.Stagewidth = 1800;
+			this.Stageheight = 900;
+
+		}
+	    /**
+	     * @param numberOfFloors
+	     * @param numberOfElevators
+	     * Specialized constructor
+	     */
+	    public Main(int numberOfFloors, int numberOfElevators, Scheduler scheduler) {
+			super();
+			this.scheduler = scheduler;
+			this.elevatornum = numberOfElevators;
+			this.floornum = numberOfFloors;
+			this.elevatorpaneheight = 200;
+			this.elevatorpanewidth = 1600;
+			this.floorpaneheight = 700;
+			this.floorpanewidth = 200;
+			this.Stagewidth = 1800;
+			this.Stageheight = 900;    	
+	    }
+
+		/**
+	     * @param args the command line arguments
+	     */
+		private  int elevatornum ;
+		private  int floornum;
+		private  double elevatorpaneheight ;
+		private  double elevatorpanewidth ;
+		private  double floorpaneheight ;
+		private  double floorpanewidth ;
+		private  double Stagewidth ;
+		private  double Stageheight ;
+		private Scheduler scheduler;
 	
 	EventHandler floorbuttonhandler = new EventHandler() 
 	{
@@ -64,6 +99,9 @@ public class Main extends Application {
           	}
           	
               event.consume();
+              // this will call schedule
+              // use scheduler to call scheduler
+
 		}
 	};
            
@@ -75,32 +113,31 @@ public class Main extends Application {
 			Button b =(Button)event.getSource();
           	String s = b.getText();
           	String id = b.getId();
-          	//int idint = Integer.parseInt(id);
-          	
-          	b.getStyleClass().removeAll("elevatorbutton, focus");
-      	    b.getStyleClass().add("buttonlit");
-          	
-          	/*if("Up".equalsIgnoreCase(s))
-          	{
-          		//up clicked
-          	    System.out.println(idint);
-          	    b.getStyleClass().removeAll("floorbutton, focus");
-          	    b.getStyleClass().add("buttonlit");          	    
-          	}
-          	else if ("Down".equalsIgnoreCase(s))
-          	{
-          		//down clicked
-          		System.out.println(idint);
-          		b.getStyleClass().removeAll("floorbutton, focus");
-          	    b.getStyleClass().add("buttonlit");          	
-          	}*/
-          	
-              event.consume();
+        	String[] splittedId= id.split("_"); // id is of form #elevatorId_#buttonId
+        	int elevatorId = Integer.parseInt(splittedId[0]);
+        	int buttonId = Integer.parseInt(splittedId[1]);
+        	//System.out.println(event);
+        	if("Up".equalsIgnoreCase(s)){
+        		//up clicked
+        	    System.out.println(elevatorId);
+        	    System.out.println(buttonId);
+        	}else{
+        		//down clicked
+        		System.out.println(elevatorId);
+        		System.out.println(buttonId);
+        	}
+        	
+            event.consume();
+            // this will call schedule
 		}
 	};
 	
     public static void main(String[] args) {
-        Application.launch(args);
+    	Main app = new Main();
+    	app.initiate(args);
+    }
+    public void initiate(String[] args) {
+    	Application.launch(args);
     }
     
     @Override
