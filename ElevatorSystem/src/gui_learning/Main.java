@@ -31,7 +31,7 @@ public class Main extends Application {
 	  */
 	    public Main() {
 			super();
-			this.scheduler = new Scheduler();
+			this.scheduler = null;// this value will be passed from scheduler object//new Scheduler();
 			this.elevatornum = 5;
 			this.floornum = 10;
 			this.elevatorpaneheight = 200;
@@ -73,6 +73,13 @@ public class Main extends Application {
 		private  double Stageheight ;
 		private Scheduler scheduler;
 	
+		public Scheduler getScheduler() {
+			return scheduler;
+		}
+		public void setScheduler(Scheduler scheduler) {
+			this.scheduler = scheduler;
+		}
+
 	EventHandler floorbuttonhandler = new EventHandler() 
 	{
 		@Override

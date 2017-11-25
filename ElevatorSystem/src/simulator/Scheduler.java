@@ -3,6 +3,8 @@
  */
 package simulator;
 
+import java.util.Scanner;
+
 import gui_learning.Main;
 
 /**
@@ -13,22 +15,36 @@ import gui_learning.Main;
 public class Scheduler {
     public int algorithmSetting = 0; // 0 is default setting
     private ElevatorThread elevators [];
-    public ElevatorThread[] getElevators() {
+    public void setElevators(int numberOfElevators) {
+		this.elevators = new ElevatorThread[numberOfElevators];
+	}
+	public ElevatorThread[] getElevators() {
 		return elevators;
 	}
 
 	private Simulator simulatorValues;
     private Schedule scheduleSelected;
     private Main gui;
+    public Main getGui() {
+		return gui;
+	}
+	public void setGui(Main gui) {
+		this.gui = gui;
+	}
+	public void setElevators(ElevatorThread[] elevators) {
+		this.elevators = elevators;
+	}
+
+	private int scheduleAlgorithmNumber;
     /**
      * Default Constructor
      */
     public Scheduler() {
     	super();
-    	this.simulatorValues = new Simulator();
-		this.elevators = new ElevatorThread[simulatorValues.getNumberOfElevators()];
+    	this.simulatorValues = null;//new Simulator(); // this value will be passed from Simulator object
+		//this.elevators = new ElevatorThread[simulatorValues.getNumberOfElevators()];
 		this.scheduleSelected = new Schedule();
-		this.gui = new Main(simulatorValues.getNumberOfFloors(), simulatorValues.getNumberOfElevators(),this);
+		//this.gui = new Main(simulatorValues.getNumberOfFloors(), simulatorValues.getNumberOfElevators(),this);
     }
 	/**
 	 * @param values
@@ -37,19 +53,24 @@ public class Scheduler {
 		// now we've all the values 
 		this.simulatorValues = values;
 		// make threads
+		this.setElevators(new ElevatorThread[values.getNumberOfElevators()]);
+		//this.setElevators(values.getNumberOfElevators());
 		this.createThreads();
 		// call gui
 		// ask for which scheduler algorithm want to use ?
 		System.out.println("Which Scheduling you want to use");
-		System.out.println("1. Schedule only moving elevators\n 2. Schedule only non-moving elevator");
-		System.out.println("3. Schedule only closest elevators moving towards requested floor\n 4. Default Schedule for an elevator System");		
+		System.out.println("1. Schedule only moving elevators\n2. Schedule only non-moving elevator");
+		System.out.println("3. Schedule only closest elevators moving towards requested floor\n4. Default Schedule for an elevator System\n");		
 		try {
-			
+			Scanner in = new Scanner(System.in);
+			this.scheduleAlgorithmNumber = in.nextInt();
 		}catch (Exception e) {
 			// Default schedule
 			System.err.println("Invalid input\n Choosing default scheduler");
 		}
-		this.gui.initiate(null);
+		this.setGui(new Main(simulatorValues.getNumberOfFloors(), simulatorValues.getNumberOfElevators(),this));
+		this.gui.setScheduler(this); // this will contain elevator threads
+		this.gui.initiate(null); // now we can launch gui
 		// connect thread to gui
 		// schedule stuff this is done on gui side
 		
@@ -68,7 +89,7 @@ public class Scheduler {
 	/**
 	 * @param algorithm
 	 */
-	public void schedulerAlgorithm(int algorithm) {
-		scheduleSelected.scheduler(algorithm,1); // not sure how this is handled but depends on GUI and flow
+	public void schedulerAlgorithm(int algorithm, int request) {
+		scheduleSelected.scheduler(algorithm,request); // not sure how this is handled but depends on GUI and flow
 	}
 }
