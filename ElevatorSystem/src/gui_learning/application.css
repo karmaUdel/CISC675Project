@@ -55,4 +55,18 @@
     -fx-border-color: #000000;
 }
 
-.my-rect { -fx-fill: red; }
+.ElevatorUnitPane {
+	 -fx-background-color: #fffafa;
+	 -fx-spacing: 10;
+}
+
+.ElevatorUnit { -fx-fill: #f5fffa; 
+	-fx-stroke-width: 2;
+	-fx-stroke:#000000; 
+}
+
+.ElevatorDoor {
+	 -fx-fill: #c0c0c0; 
+	-fx-stroke-width: 2;
+	-fx-stroke:#000000; 
+}
