@@ -68,6 +68,7 @@ public class Scheduler {
 		}
 		this.setGui(new Main(simulatorValues.getNumberOfFloors(), simulatorValues.getNumberOfElevators(),this));
 		this.gui.setScheduler(this); // this will contain elevator threads
+		this.scheduleSelected.setElevators(this.getElevators());
 		this.gui.initiate(null,this.gui); // now we can launch gui
 		// connect thread to gui
 		// schedule stuff this is done on gui side

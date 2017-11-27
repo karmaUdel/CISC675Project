@@ -34,6 +34,7 @@ public class Main extends Application {
 	 /**
 	  * Default Constructor
 	  */
+	static ArrayList<Main> list = new ArrayList<Main>();
 	    public Main() {
 			super();
 			this.scheduler = null;// this value will be passed from scheduler object//new Scheduler();
@@ -45,7 +46,7 @@ public class Main extends Application {
 			this.floorpanewidth = 200;
 			this.Stagewidth = 1800;
 			this.Stageheight = 900;
-
+			list.add(this);
 		}
 	    /**
 	     * @param numberOfFloors
@@ -62,9 +63,14 @@ public class Main extends Application {
 			this.floorpaneheight = 700;
 			this.floorpanewidth = 200;
 			this.Stagewidth = 1800;
-			this.Stageheight = 900;    	
+			this.Stageheight = 900;
+			System.out.println(this);
+			list.add(this);
+			System.out.println(this.scheduler);
 	    }
-
+	    public Main getInstance() {
+	        return this;
+	    }
 		/**
 	     * @param args the command line arguments
 	     */
@@ -109,37 +115,8 @@ public class Main extends Application {
           		b.getStyleClass().removeAll("floorbutton, focus");
           	    b.getStyleClass().add("buttonlit");          	
           	}
-        	@SuppressWarnings("rawtypes")
-			Class [] args = new Class[1];
-        	args[0] = Integer.class;
-        	try {
-        			//Method marr[] = this.getClass().getEnclosingClass().getMethods();
-        			//System.out.println(this.getClass().getEnclosingClass());
-        			/*for(int k=0;k<marr.length;k++) {
-        				System.out.println(marr[k].getName());
-        				if ("udate".equalsIgnoreCase(marr[k].getName())) {
-        					System.out.println(marr[k].getName());
-        				}
-        			}*/
-        			Method m = this.getClass().getEnclosingClass().getMethod("update", args);     		
-        			//Method m = Main.class.getMethod("update", args);
-					try {
-						m.invoke(Main.class.newInstance(),idint);
-					} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
-							| InstantiationException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-   			} catch (NoSuchMethodException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SecurityException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-          	
-              event.consume();
+        	Main.list.get(0).update(idint);
+			event.consume();
               // this will call schedule
               // use scheduler to call scheduler
 
@@ -171,33 +148,8 @@ public class Main extends Application {
         		 b.getStyleClass().removeAll("elevatorbutton, focus");
            	    b.getStyleClass().add("buttonlit");
         	}
-        	@SuppressWarnings("rawtypes")
-			Class [] args = new Class[2];
-        	args[0] = Integer.class;
-        	args[1] = Integer.class;
-        	try {
-        		/*		Method marr[] = this.getClass().getEnclosingClass().getMethods();
-        			//System.out.println(this.getClass().getEnclosingClass());
-        			for(int k=0;k<marr.length;k++) {
-        				System.out.println(marr[k].getName());
-        			}
-        	*/		
-        			Method m = this.getClass().getEnclosingClass().getMethod("update", args);     		
-        			try {
-						m.invoke(Main.class.newInstance(),elevatorId,buttonId);
-					} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
-							| InstantiationException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-   			} catch (NoSuchMethodException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SecurityException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-            event.consume();
+        	Main.list.get(0).update(elevatorId,buttonId);
+		    event.consume();
             // this will call schedule
 		}
 	};
@@ -216,23 +168,33 @@ public class Main extends Application {
      * @param request
      */
     public void update(Integer elevator, Integer request) {
-    	ElevatorThread [] elevators = this.scheduler.getElevators();
-    	//System.out.println("update is called "+ elevator);
-    	ArrayList<Integer> requestList = elevators[elevator].getDestinationList();
-    	requestList.add(request);
-    	elevators[elevator].setDestinationList(requestList);
-    	//destination list got updated 
-    	
+    	if(this.scheduler!=null) {
+	    	ElevatorThread [] elevators = this.scheduler.getElevators();
+	    	//System.out.println("update is called "+ elevator);
+	    	ArrayList<Integer> requestList = elevators[elevator].getDestinationList();
+	    	requestList.add(request);
+	    	elevators[elevator].setDestinationList(requestList);
+	    	//destination list got updated 
+	    }
+    	System.out.println(this);
+
+    	System.out.println(this.scheduler);
     }
     /**
      *
      * @param request
      */
     public void update(Integer request) {
-    	int elevatorTobeCalled = this.scheduler.schedulerAlgorithm(4, request);
+    	if(this.scheduler!=null) {
+    		int elevatorTobeCalled = this.scheduler.schedulerAlgorithm(4, request);
     	
     	// call the elevator and do something
     	//System.out.println("update is called "+ request);
+    	}
+    	System.out.println(this);
+
+    	System.out.println(this.scheduler);
+
     }
     @Override
     public void start(Stage primaryStage)throws Exception {

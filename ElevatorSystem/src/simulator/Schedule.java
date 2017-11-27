@@ -18,6 +18,9 @@ public class Schedule {
 		super();
 		elevators = new ElevatorThread[5];
 	}
+	public void setElevators(ElevatorThread[] elevators) {
+		this.elevators = elevators;
+	}
 	/**
 	 * Specialized Constructor
 	 * @param schedulerObject
