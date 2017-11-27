@@ -1,5 +1,9 @@
 package gui_learning;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -22,6 +26,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import simulator.ElevatorThread;
 import simulator.Scheduler;
 
 
@@ -93,17 +98,46 @@ public class Main extends Application {
           	if("Up".equalsIgnoreCase(s))
           	{
           		//up clicked
-          	    System.out.println(idint);
+          	    //System.out.println(idint);
           	    b.getStyleClass().removeAll("floorbutton, focus");
           	    b.getStyleClass().add("buttonlit");          	    
           	}
           	else if ("Down".equalsIgnoreCase(s))
           	{
           		//down clicked
-          		System.out.println(idint);
+          		//System.out.println(idint);
           		b.getStyleClass().removeAll("floorbutton, focus");
           	    b.getStyleClass().add("buttonlit");          	
           	}
+        	@SuppressWarnings("rawtypes")
+			Class [] args = new Class[1];
+        	args[0] = Integer.class;
+        	try {
+        			//Method marr[] = this.getClass().getEnclosingClass().getMethods();
+        			//System.out.println(this.getClass().getEnclosingClass());
+        			/*for(int k=0;k<marr.length;k++) {
+        				System.out.println(marr[k].getName());
+        				if ("udate".equalsIgnoreCase(marr[k].getName())) {
+        					System.out.println(marr[k].getName());
+        				}
+        			}*/
+        			Method m = this.getClass().getEnclosingClass().getMethod("update", args);     		
+        			//Method m = Main.class.getMethod("update", args);
+					try {
+						m.invoke(Main.class.newInstance(),idint);
+					} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
+							| InstantiationException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+   			} catch (NoSuchMethodException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SecurityException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
           	
               event.consume();
               // this will call schedule
@@ -126,14 +160,43 @@ public class Main extends Application {
         	//System.out.println(event);
         	if("Up".equalsIgnoreCase(s)){
         		//up clicked
-        	    System.out.println(elevatorId);
-        	    System.out.println(buttonId);
+        	    //System.out.println(elevatorId);
+        	    //System.out.println(buttonId);
+        	    b.getStyleClass().removeAll("elevatorbutton, focus");
+          	    b.getStyleClass().add("buttonlit");
         	}else{
         		//down clicked
-        		System.out.println(elevatorId);
-        		System.out.println(buttonId);
+        		//System.out.println(elevatorId);
+        		//System.out.println(buttonId);
+        		 b.getStyleClass().removeAll("elevatorbutton, focus");
+           	    b.getStyleClass().add("buttonlit");
         	}
-        	
+        	@SuppressWarnings("rawtypes")
+			Class [] args = new Class[2];
+        	args[0] = Integer.class;
+        	args[1] = Integer.class;
+        	try {
+        		/*		Method marr[] = this.getClass().getEnclosingClass().getMethods();
+        			//System.out.println(this.getClass().getEnclosingClass());
+        			for(int k=0;k<marr.length;k++) {
+        				System.out.println(marr[k].getName());
+        			}
+        	*/		
+        			Method m = this.getClass().getEnclosingClass().getMethod("update", args);     		
+        			try {
+						m.invoke(Main.class.newInstance(),elevatorId,buttonId);
+					} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
+							| InstantiationException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+   			} catch (NoSuchMethodException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SecurityException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
             event.consume();
             // this will call schedule
 		}
@@ -141,26 +204,60 @@ public class Main extends Application {
 	
     public static void main(String[] args) {
     	Main app = new Main();
-    	app.initiate(args);
+    	app.initiate(args,app);
     }
-    public void initiate(String[] args) {
+    public void initiate(String[] args, Main main) {
     	Application.launch(args);
+    	
     }
-    
+    /**
+     * 
+     * @param elevator
+     * @param request
+     */
+    public void update(Integer elevator, Integer request) {
+    	ElevatorThread [] elevators = this.scheduler.getElevators();
+    	//System.out.println("update is called "+ elevator);
+    	ArrayList<Integer> requestList = elevators[elevator].getDestinationList();
+    	requestList.add(request);
+    	elevators[elevator].setDestinationList(requestList);
+    	//destination list got updated 
+    	
+    }
+    /**
+     *
+     * @param request
+     */
+    public void update(Integer request) {
+    	int elevatorTobeCalled = this.scheduler.schedulerAlgorithm(4, request);
+    	
+    	// call the elevator and do something
+    	//System.out.println("update is called "+ request);
+    }
     @Override
     public void start(Stage primaryStage)throws Exception {
     	
         primaryStage.setTitle("Elevator Control System");
         
+        // Create the bottompane for all node in this GUI graph
         BorderPane BottomPane = new BorderPane();
         
+        // Create a Panel for all floors
         VBox FloorPane = BuildFloorButtonPane();
+        
+        // Create a Panel for all elevator controls
         HBox ElevatorPane = BuildElevatorButtonPane();
         
+        // Create a Panel for all elevator units
+        AnchorPane ElevatorUnitPane = BuildElevatorUnitPane();
+        
+        //Set location for these two large panels
         BottomPane.setLeft(FloorPane);
         BottomPane.setBottom(ElevatorPane);
+        BottomPane.setCenter(ElevatorUnitPane);
         
-        
+        /********************************** Initializing GUI control parts  **********************************/
+        // These are the buttons for floors
         Button[] floorbuttons = new Button[floornum*2];
         for(int i=(floornum*2)-1; i>=0;i=i-2)
         {
@@ -187,7 +284,7 @@ public class Main extends Application {
         	floorbuttons[i-1].getStyleClass().add("floorbutton");        	
         }
         
-
+        //These are the panels for each floor
         VBox[] floorspane = new VBox[floornum];
         for (int i=floornum-1; i>=0;i--)
         {
@@ -202,7 +299,7 @@ public class Main extends Application {
         	FloorPane.getChildren().add(floorspane[i]);      	
         }
         
-        
+        // These are elevator buttons
         Button[][] elevatorbutton = new Button[elevatornum][floornum];
         for (int i=0; i<elevatornum; i++)
         {
@@ -219,6 +316,7 @@ public class Main extends Application {
         	}
         }
         
+        //These are panels for elevators
         TilePane[] elevatorspane = new TilePane[elevatornum];
         for (int i=0; i<elevatornum;i++)
         {
@@ -236,13 +334,58 @@ public class Main extends Application {
         	}
         }
         
+        // These are elevator unit bases
+        Rectangle[] elevatorunitbases = new Rectangle[elevatornum];
+        for (int i=0; i<elevatornum;i++) 
+        {
+        	elevatorunitbases[i] = BuildOneElevatorUnitBase(elevatorpanewidth/elevatornum-20, floorpaneheight/floornum);
+        	elevatorunitbases[i].setLayoutX(0);
+        	elevatorunitbases[i].setLayoutY(0);
+        	elevatorunitbases[i].getStyleClass().add("ElevatorUnit");     	
+        	//ElevatorUnitPane.getChildren().add(elevatorunitbases[i]);
+        	//System.out.println(""+ elevatorunitbases[i].getWidth());     	
+        }
+        
+        // These are the elevator left doors
+        Rectangle[] elevatorleftdoors = new Rectangle[elevatornum];
+        for (int i=0; i<elevatornum;i++) 
+        {
+        	elevatorleftdoors[i] = BuildOneLeftDoor((elevatorpanewidth/elevatornum-20)/8, (floorpaneheight/floornum)* 0.8);
+        	elevatorleftdoors[i].setLayoutX((elevatorpanewidth/elevatornum-20)*3/8);
+        	elevatorleftdoors[i].setLayoutY((floorpaneheight/floornum)* 0.2);
+        	elevatorleftdoors[i].getStyleClass().add("ElevatorDoor"); 
+        }
+        
+     // These are the elevator right doors
+        Rectangle[] elevatorrightdoors = new Rectangle[elevatornum];
+        for (int i=0; i<elevatornum;i++) 
+        {
+        	elevatorrightdoors[i] = BuildOneRightDoor((elevatorpanewidth/elevatornum-20)/8, (floorpaneheight/floornum)* 0.8);
+        	elevatorrightdoors[i].setLayoutX((elevatorpanewidth/elevatornum-20)*4/8);
+        	elevatorrightdoors[i].setLayoutY((floorpaneheight/floornum)* 0.2);
+        	elevatorrightdoors[i].getStyleClass().add("ElevatorDoor"); 
+        }
+        
+     // These are elevator units
+        Group[] elevatorunits = new Group[elevatornum];
+        for (int i=0; i<elevatornum;i++)
+        {
+        	elevatorunits[i] = new Group();
+        	elevatorunits[i].setLayoutX((elevatorpanewidth/elevatornum)*i + 10);
+        	elevatorunits[i].setLayoutY((floorpaneheight/floornum)*(floornum-1));
+        	elevatorunits[i].getChildren().addAll(elevatorunitbases[i], elevatorleftdoors[i],elevatorrightdoors[i]);
+        	ElevatorUnitPane.getChildren().add(elevatorunits[i]);
+        }
+        
+        // Create scene and load css file
         Scene scene = new Scene(BottomPane, Stagewidth, Stageheight);
         scene.getStylesheets().add("gui_learning/application.css");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
     
-    
+    /************* Below are methods to build large panels for floor buttons, elevator buttons, and elevator units *************/
+    //The method for building the panel for all floors
     public VBox BuildFloorButtonPane()
     {
     	VBox floorpane = new VBox();
@@ -263,6 +406,7 @@ public class Main extends Application {
     	return floorpane;
     }
     
+    //The method for building the panel for all elevators
     public HBox BuildElevatorButtonPane()
     {
     	HBox elevatorpane = new HBox();
@@ -283,6 +427,16 @@ public class Main extends Application {
     	return elevatorpane;
     }
     
+    //The method for building the panel for all elevator units
+    public AnchorPane BuildElevatorUnitPane()
+    {
+    	AnchorPane ElevatorUnitPane = new AnchorPane();	
+    	ElevatorUnitPane.getStyleClass().add("ElevatorUnitPane"); 
+    	return ElevatorUnitPane;
+    }
+    
+    /************* Below are methods to build small panels for one floor, one elevator control, and one elevator unit *************/
+    //The method for building the panel for one floor
     public VBox BuildOneFloor(double floorwidth, double floorheight)
     {
     	VBox OnefloorPane = new VBox();
@@ -298,6 +452,7 @@ public class Main extends Application {
     	return OnefloorPane;
     }
     
+    //The method for building the panel for one elevator
     public TilePane BuildOneElevatorButtons(double elevatorwidth, double elevatorheight)
     {
     	TilePane OneElevatorButtonPane = new TilePane();
@@ -311,6 +466,40 @@ public class Main extends Application {
     	OneElevatorButtonPane.setMinHeight(elevatorheight);
     	
     	return OneElevatorButtonPane;
+    }
+    
+    // The method for building one elevator unit 
+    public Group BuildOneElevatorUnit()
+    {
+    	Group elevatorunit = new Group();
+    	return elevatorunit;
+    }
+    
+    //The method for building one elevator unit base
+    public Rectangle BuildOneElevatorUnitBase(double elevatorunit_width, double elevatorunit_height)
+    {
+    	Rectangle elevatorunitbase = new Rectangle();	
+    	elevatorunitbase.setWidth(elevatorunit_width);
+    	elevatorunitbase.setHeight(elevatorunit_height);  	
+    	return elevatorunitbase;
+    }
+    
+    // The method for building the left door for the elevator
+    public Rectangle BuildOneLeftDoor(double doorwidth, double doorheight)
+    {
+    	Rectangle leftdoor = new Rectangle();  	
+    	leftdoor.setWidth(doorwidth);
+    	leftdoor.setHeight(doorheight);    	
+    	return leftdoor; 	
+    }
+    
+ // The method for building the right door for the elevator
+    public Rectangle BuildOneRightDoor(double doorwidth, double doorheight)
+    {
+    	Rectangle rightdoor = new Rectangle();
+    	rightdoor.setWidth(doorwidth);
+    	rightdoor.setHeight(doorheight);
+    	return rightdoor;
     }
 }
 

@@ -3,6 +3,9 @@
  */
 package simulator;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 /**
  * @author Aditya
  *
@@ -15,7 +18,15 @@ public class ElevatorThread extends Thread {
 	private int location; // default value is 0
 	private int destination; // default value is -1
 	private int direction; // default value is 0, 1: Going up, 0: Stationary, -1: Going Down
-	
+	private ArrayList<Integer> destinationList;
+	public ArrayList<Integer> getDestinationList() {
+		return sort(destinationList);
+	}
+
+	public void setDestinationList(ArrayList<Integer> destinationList) {
+		this.destinationList = sort(destinationList);
+	}
+
 	public int getElevatorId() {
 		return elevatorId;
 	}
@@ -53,6 +64,7 @@ public class ElevatorThread extends Thread {
 		this.destination = -1;
 		this.direction = 0;
 		this.elevatorId = count++;
+		this.destinationList = new ArrayList<Integer>();		
 	}
 
 	/**
@@ -64,6 +76,7 @@ public class ElevatorThread extends Thread {
 		this.destination = -1;
 		this.direction = 0;
 		this.elevatorId = count++;
+		this.destinationList = new ArrayList<Integer>();		
 	}
 
 	/**
@@ -75,6 +88,7 @@ public class ElevatorThread extends Thread {
 		this.destination = -1;
 		this.direction = 0;
 		this.elevatorId = count++;
+		this.destinationList = new ArrayList<Integer>();		
 	}
 
 	/**
@@ -87,6 +101,7 @@ public class ElevatorThread extends Thread {
 		this.destination = -1;
 		this.direction = 0;
 		this.elevatorId = count++;
+		this.destinationList = new ArrayList<Integer>();		
 	}
 
 	/**
@@ -99,6 +114,7 @@ public class ElevatorThread extends Thread {
 		this.destination = -1;
 		this.direction = 0;
 		this.elevatorId = count++;
+		this.destinationList = new ArrayList<Integer>();		
 	}
 
 	/**
@@ -111,6 +127,7 @@ public class ElevatorThread extends Thread {
 		this.destination = -1;
 		this.direction = 0;
 		this.elevatorId = count++;
+		this.destinationList = new ArrayList<Integer>();		
 	}
 
 	/**
@@ -124,6 +141,7 @@ public class ElevatorThread extends Thread {
 		this.destination = -1;
 		this.direction = 0;
 		this.elevatorId = count++;
+		this.destinationList = new ArrayList<Integer>();		
 	}
 
 	/**
@@ -138,6 +156,7 @@ public class ElevatorThread extends Thread {
 		this.destination = -1;
 		this.direction = 0;
 		this.elevatorId = count++;
+		this.destinationList = new ArrayList<Integer>();		
 	}
 	public ElevatorThread(int location,int destination,int direction) {
 		super();
@@ -145,6 +164,7 @@ public class ElevatorThread extends Thread {
 		this.destination = destination;
 		this.direction = direction;
 		this.elevatorId = count++;
+		this.destinationList = new ArrayList<Integer>();
 	}
 	public boolean isMoving() {
 		if(this.getDirection()==0) {
@@ -153,5 +173,11 @@ public class ElevatorThread extends Thread {
 			return true;
 		}
 	}
-
+	public ArrayList<Integer> sort(ArrayList<Integer> list) {
+		Collections.sort(list);// sort ascending 0,1,2,3....
+		if(this.getDirection()== -1){
+			Collections.reverse(list); // if direction is -1 then reverse the order
+		}
+		return list;
+	}
 }

@@ -31,7 +31,7 @@ public class Schedule {
 	 * @param setting
 	 * @param request
 	 */
-	public void scheduler(int setting,int request) {
+	public int scheduler(int setting,int request) {
 		int elevatorId =0;
 		switch(setting) {
 		case 1:
@@ -49,7 +49,7 @@ public class Schedule {
 		}
 		callAnElevator(elevatorId);
 		routine();
-		return;
+		return elevatorId;
 	}
 	/**
 	 * call only moving Elevators
@@ -171,6 +171,7 @@ public class Schedule {
 	 * This method marks an elevator for movement
 	 * this method is usually followed by the routine() method call
 	 * @param elevatorId
+	 * ------------------Not needed anymore---------------
 	 */
 	private void callAnElevator(int elevatorId) {
 		
@@ -178,6 +179,7 @@ public class Schedule {
 	/**
 	 *
 	 * This is routine that every elevator follows once called
+	 * ------------------Not needed anymore---------------
 	 */
 	private void routine() {
 		
