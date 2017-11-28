@@ -64,9 +64,10 @@ public class Main extends Application {
 			this.floorpanewidth = 200;
 			this.Stagewidth = 1800;
 			this.Stageheight = 900;
-			System.out.println(this);
+			System.out.println(this.elevatornum);
+			System.out.println(this.floornum);
 			list.add(this);
-			System.out.println(this.scheduler);
+		       System.out.println(this);
 	    }
 	    public Main getInstance() {
 	        return this;
@@ -186,9 +187,12 @@ public class Main extends Application {
      */
     public void update(Integer request) {
     	if(this.scheduler!=null) {
-    		int elevatorTobeCalled = this.scheduler.schedulerAlgorithm(4, request);
+    		int elevatorTobeCalled = this.scheduler.schedulerAlgorithm(this.scheduler.algorithmSetting, request);
     	
     	// call the elevator and do something
+    		// set to destinationList
+    		// move the elevator
+    		// 
     	//System.out.println("update is called "+ request);
     	}
     	System.out.println(this);
@@ -198,9 +202,12 @@ public class Main extends Application {
     }
     @Override
     public void start(Stage primaryStage)throws Exception {
+    	//Main.this = Main.list.get(0);
+    	this.elevatornum = Main.list.get(0).elevatornum;
+    	this.floornum = Main.list.get(0).floornum;
     	
         primaryStage.setTitle("Elevator Control System");
-        
+        System.out.println(this);
         // Create the bottompane for all node in this GUI graph
         BorderPane BottomPane = new BorderPane();
         
@@ -220,6 +227,9 @@ public class Main extends Application {
         
         /********************************** Initializing GUI control parts  **********************************/
         // These are the buttons for floors
+        System.out.println("Inside start "+this.floornum);
+        System.out.println("Inside start "+this.elevatornum);
+
         Button[] floorbuttons = new Button[floornum*2];
         for(int i=(floornum*2)-1; i>=0;i=i-2)
         {
