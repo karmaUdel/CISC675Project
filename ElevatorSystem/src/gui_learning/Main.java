@@ -64,10 +64,9 @@ public class Main extends Application {
 			this.floorpanewidth = 200;
 			this.Stagewidth = 1800;
 			this.Stageheight = 900;
-			System.out.println(this.elevatornum);
-			System.out.println(this.floornum);
+			System.out.println(this);
 			list.add(this);
-		       System.out.println(this);
+			System.out.println(this.scheduler);
 	    }
 	    public Main getInstance() {
 	        return this;
@@ -187,7 +186,7 @@ public class Main extends Application {
      */
     public void update(Integer request) {
     	if(this.scheduler!=null) {
-    		int elevatorTobeCalled = this.scheduler.schedulerAlgorithm(this.scheduler.algorithmSetting, request);
+    		int elevatorTobeCalled = this.scheduler.schedulerAlgorithm(4, request);
     	
     	// call the elevator and do something
     		// set to destinationList
@@ -207,7 +206,7 @@ public class Main extends Application {
     	this.floornum = Main.list.get(0).floornum;
     	
         primaryStage.setTitle("Elevator Control System");
-        System.out.println(this);
+        
         // Create the bottompane for all node in this GUI graph
         BorderPane BottomPane = new BorderPane();
         
@@ -227,11 +226,19 @@ public class Main extends Application {
         
         /********************************** Initializing GUI control parts  **********************************/
         // These are the buttons for floors
-        System.out.println("Inside start "+this.floornum);
-        System.out.println("Inside start "+this.elevatornum);
-
-        Button[] floorbuttons = new Button[floornum*2];
-        for(int i=(floornum*2)-1; i>=0;i=i-2)
+        Button[] floorbuttons = new Button[floornum*2-2];
+        
+        floorbuttons[floornum*2-3] = new Button();
+        floorbuttons[floornum*2-3].setMaxHeight((floorpaneheight/floornum)/5);
+    	floorbuttons[floornum*2-3].setPrefHeight((floorpaneheight/floornum)/5);
+    	floorbuttons[floornum*2-3].setMinHeight((floorpaneheight/floornum)/5);
+    	floorbuttons[floornum*2-3].setMaxWidth(Double.MAX_VALUE);
+    	floorbuttons[floornum*2-3].setText("Down");
+    	floorbuttons[floornum*2-3].setId((floornum*2-3)+""); 
+    	floorbuttons[floornum*2-3].setOnAction(floorbuttonhandler);
+    	floorbuttons[floornum*2-3].getStyleClass().add("floorbutton"); 
+    	      
+        for(int i=(floornum*2)-4; i>=1;i=i-2)
         {
         	floorbuttons[i] = new Button();
         	floorbuttons[i].setMaxHeight((floorpaneheight/floornum)/5);
@@ -256,6 +263,16 @@ public class Main extends Application {
         	floorbuttons[i-1].getStyleClass().add("floorbutton");        	
         }
         
+        floorbuttons[0] = new Button();
+        floorbuttons[0].setMaxHeight((floorpaneheight/floornum)/5);
+    	floorbuttons[0].setPrefHeight((floorpaneheight/floornum)/5);
+    	floorbuttons[0].setMinHeight((floorpaneheight/floornum)/5);
+    	floorbuttons[0].setMaxWidth(Double.MAX_VALUE);
+    	floorbuttons[0].setText("Up");
+    	floorbuttons[0].setId(0+""); 
+    	floorbuttons[0].setOnAction(floorbuttonhandler);
+    	floorbuttons[0].getStyleClass().add("floorbutton"); 
+    	
         //These are the panels for each floor
         VBox[] floorspane = new VBox[floornum];
         for (int i=floornum-1; i>=0;i--)
@@ -263,13 +280,21 @@ public class Main extends Application {
         	floorspane[i] = BuildOneFloor(floorpanewidth, floorpaneheight/floornum);
         	floorspane[i].setLayoutX(0);
         	floorspane[i].setLayoutY((floorpaneheight/floornum)*i);
-        	floorspane[i].getChildren().add(floorbuttons[i*2+1]);
-        	floorspane[i].getChildren().add(floorbuttons[i*2]);
         	
         	floorspane[i].getStyleClass().add("floorspane"); 
-        	floorspane[i].setPadding(new Insets(10, 70, 10, 70));
-        	FloorPane.getChildren().add(floorspane[i]);      	
+        	floorspane[i].setPadding(new Insets(10, 70, 10, 70)); 
+        	FloorPane.getChildren().add(floorspane[i]);
         }
+        
+        floorspane[floornum-1].getChildren().add(floorbuttons[floornum*2-3]);
+        
+        for (int i=floornum-2; i>=1;i--)
+        {
+        	floorspane[i].getChildren().add(floorbuttons[i*2]);
+        	floorspane[i].getChildren().add(floorbuttons[i*2-1]);
+        }
+        
+        floorspane[0].getChildren().add(floorbuttons[0]);
         
         // These are elevator buttons
         Button[][] elevatorbutton = new Button[elevatornum][floornum];
