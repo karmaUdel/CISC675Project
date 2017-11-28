@@ -163,7 +163,7 @@ public class Main extends Application {
     	
     }
     /**
-     * 
+     * update for requests made inside an elevator
      * @param elevator
      * @param request
      */
@@ -175,13 +175,42 @@ public class Main extends Application {
 	    	requestList.add(request);
 	    	elevators[elevator].setDestinationList(requestList);
 	    	//destination list got updated 
+	    	//create task
+	    	// rect[elevatorId].bind(newTask);
+	    	// new Thread(newTask).start();
+	    	//task.travel
+	    	//call task
 	    }
     	System.out.println(this);
 
     	System.out.println(this.scheduler);
     }
+    
+    /* Task newTask = new Task(){
+	     * @Override
+	     * public void run(){
+	     * 		travel();
+	     * }
+	     * PUBLIC VOID travel(){
+		     * while{
+		     * 	if floor == in destionation list
+		     * 			stop
+		     * getCordinates()
+		     * fix them 
+		     * play()	
+		     * turn buttonlight off.
+		     * open door
+		     * close door
+		     * }
+		     * 
+	     * }
+	     * 
+	     * public void close(){}
+	     * public void open(){}
+     * };
+    */
     /**
-     *
+     * update for requests made from floor buttons
      * @param request
      */
     public void update(Integer request) {
