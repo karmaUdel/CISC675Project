@@ -207,7 +207,7 @@ public class Main extends Application {
 	     * 
 	     * public void close(){}
 	     * public void open(){}
-     * };
+     test* };
     */
     /**
      * update for requests made from floor buttons
