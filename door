@@ -1,0 +1,78 @@
+import javafx.application.Application;  
+import javafx.stage.Stage; 
+import javafx.animation.KeyFrame;  
+import javafx.animation.KeyValue;  
+import javafx.animation.Timeline;   
+import javafx.scene.Group;  
+import javafx.scene.Scene;  
+//import javafx.scene.effect.Lighting;  
+import javafx.scene.layout.StackPane;  
+import javafx.scene.paint.Color;  
+import javafx.scene.shape.Rectangle;  
+//import javafx.scene.text.Text;  
+import javafx.util.Duration;
+//import javafx.animation.Transition;
+import javafx.animation.TranslateTransition;
+import java.util.Random;
+
+public class Main extends Application {  
+    
+    //main timeline  
+    private Timeline timeline;  
+    //private AnimationTimer timer;  
+   
+    //variable for storing actual frame  
+    //private Integer i=0;  
+   
+    @Override public void start(Stage stage) {  
+        Group p = new Group();  
+        Scene scene = new Scene(p);  
+        stage.setScene(scene);  
+        stage.setWidth(500);  
+        stage.setHeight(500);  
+        p.setTranslateX(80); //change the location 
+        p.setTranslateY(80);  
+   
+        //create a rectangle with effect  
+        final Rectangle rectangle = new Rectangle(10, 5, 40, 70);//change the length and height according to floors
+        rectangle.setFill(Color.SILVER); 
+        final Rectangle rec = new Rectangle(5, 5, 40, 70);//change the length and height according to floors
+        rec.setFill(Color.SILVER);
+        final StackPane stack = new StackPane();  
+        stack.getChildren().addAll( rectangle, rec/*, text*/);  
+        stack.setLayoutX(30);  
+        stack.setLayoutY(30);  
+   
+        p.getChildren().add(stack);  
+        stage.show();  
+   
+        //create a timeline for moving the circle  
+        timeline = new Timeline();  
+      
+        timeline.setCycleCount(Timeline.INDEFINITE);  
+        timeline.setAutoReverse(true);  //set the periodic of annimation
+    
+       
+        TranslateTransition translateTransition=new TranslateTransition(Duration.millis(3000), rectangle);
+        translateTransition.setFromX(100);
+        translateTransition.setToX(50);
+        translateTransition.play();
+        TranslateTransition translateTransition1=new TranslateTransition(Duration.millis(3000), rec);
+        translateTransition1.setFromX(0);
+        translateTransition1.setToX(50);
+        translateTransition1.play();
+        
+    }  
+          
+          
+    private int random() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+	public static void main(String[] args) {  
+        Application.launch(args);  
+    }  
+  }  
+
