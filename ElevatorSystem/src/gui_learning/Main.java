@@ -4,18 +4,26 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
+import javafx.animation.AnimationTimer;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.collections.ObservableMap;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.InputEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -26,6 +34,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import simulator.ElevatorThread;
 import simulator.Scheduler;
 
@@ -83,6 +92,7 @@ public class Main extends Application {
 		private  double Stagewidth ;
 		private  double Stageheight ;
 		private Scheduler scheduler;
+		private Stage primaryStage;
 	
 		public Scheduler getScheduler() {
 			return scheduler;
@@ -100,6 +110,10 @@ public class Main extends Application {
           	String s = b.getText();
           	String id = b.getId();
           	int idint = Integer.parseInt(id);
+          	if(idint%2==1){
+          		idint++; //if value is odd add 1 and didvide by 2 which will give floor number
+          	}
+          	idint=idint/2;
           	
           	if("Up".equalsIgnoreCase(s))
           	{
@@ -169,11 +183,61 @@ public class Main extends Application {
      */
     public void update(Integer elevator, Integer request) {
     	if(this.scheduler!=null) {
-	    	ElevatorThread [] elevators = this.scheduler.getElevators();
-	    	//System.out.println("update is called "+ elevator);
+    		ElevatorThread [] elevators = this.scheduler.getElevators();
+	    	System.out.println("update is called "+ elevator);
+	    	System.out.println("update is called "+ request);
 	    	ArrayList<Integer> requestList = elevators[elevator].getDestinationList();
 	    	requestList.add(request);
 	    	elevators[elevator].setDestinationList(requestList);
+	    	
+	    	Node eleanchorpane = ((BorderPane) this.primaryStage.getScene().getRoot()).getCenter();
+	    	Group ele = (Group) eleanchorpane.lookup("#e"+elevator);
+	    	//Set<Node> set = eleanchorpane.lookupAll(selector)
+			System.out.println("Inside update" +ele);
+	    	
+	    	Task elevatormove = new Task()
+	    	    {
+	    		@Override
+	    		protected Integer call() throws Exception{
+	    			System.out.println("Inside call" +ele);
+	    			travel(ele);
+	    			return 1;
+   
+	    		}
+	    	    	/* @Override public Void call() 
+	    	    	 {
+	    	    		 travel(ele);
+	    	    		 return null;
+	    	    	 }*/
+	    	    	 
+	    	    	 public void travel(Group elevatorunit)
+	 	    	    {
+	    	    		 System.out.println("Inside travel");
+	    	    		Rectangle elevrec = (Rectangle)(elevatorunit.getChildren().get(0));
+	    	    		Rectangle elevrec1 = (Rectangle)(elevatorunit.getChildren().get(1));
+	    	    		Rectangle elevrec2= (Rectangle)(elevatorunit.getChildren().get(2));
+	 	    	    	
+	    	    		double cur_elelocation_y = elevrec.getLayoutY();
+	 	    	    	if (cur_elelocation_y != (Math.ceil((double)request/2)))
+	 	    	    	{
+	 	    	    		Timeline moveing = new Timeline();
+	 	    	    		System.out.println(elevrec.yProperty()+ "---- , ----"+ request * (double)(floorpaneheight/floornum));
+		 	    	    	final KeyValue kv=new KeyValue(elevrec.yProperty(), - request * (double)(floorpaneheight/floornum));  
+		 	    	    	final KeyValue kv1=new KeyValue(elevrec1.yProperty(),-  request * (double)(floorpaneheight/floornum));
+		 	    	    	final KeyValue kv2=new KeyValue(elevrec2.yProperty(), - request * (double)(floorpaneheight/floornum));
+		 	    	        final KeyFrame kf=new KeyFrame((Duration.millis(Math.abs(cur_elelocation_y-Math.ceil((double)request/2))*1000)), kv);
+		 	    	        final KeyFrame kf1=new KeyFrame((Duration.millis(Math.abs(cur_elelocation_y-Math.ceil((double)request/2))*1000)), kv1);
+		 	    	        final KeyFrame kf2=new KeyFrame((Duration.millis(Math.abs(cur_elelocation_y-Math.ceil((double)request/2))*1000)), kv2);
+		 	    	        moveing.getKeyFrames().addAll(kf,kf1,kf2);  
+		 	    	        moveing.play();
+	 	    	    	}
+	 	    	    	
+	 	    	    	
+	 	    	    }
+	    	    };
+	    	    Thread x = new Thread(elevatormove);
+	    	    x.run();
+	    	   
 	    	//destination list got updated 
 	    	//create task
 	    	// rect[elevatorId].bind(newTask);
@@ -186,6 +250,7 @@ public class Main extends Application {
     	System.out.println(this.scheduler);
     }
     
+   
     /* Task newTask = new Task(){
 	     * @Override
 	     * public void run(){
@@ -221,7 +286,7 @@ public class Main extends Application {
     		// set to destinationList
     		// move the elevator
     		// 
-    	//System.out.println("update is called "+ request);
+    		System.out.println("update is called "+ request);
     	}
     	System.out.println(this);
 
@@ -233,7 +298,8 @@ public class Main extends Application {
     	//Main.this = Main.list.get(0);
     	this.elevatornum = Main.list.get(0).elevatornum;
     	this.floornum = Main.list.get(0).floornum;
-    	
+    	this.primaryStage = primaryStage;
+    	Main.list.get(0).primaryStage = this.primaryStage;
         primaryStage.setTitle("Elevator Control System");
         
         // Create the bottompane for all node in this GUI graph
@@ -392,6 +458,7 @@ public class Main extends Application {
         	elevatorrightdoors[i].getStyleClass().add("ElevatorDoor"); 
         }
         
+  
      // These are elevator units
         Group[] elevatorunits = new Group[elevatornum];
         for (int i=0; i<elevatornum;i++)
@@ -399,15 +466,19 @@ public class Main extends Application {
         	elevatorunits[i] = new Group();
         	elevatorunits[i].setLayoutX((elevatorpanewidth/elevatornum)*i + 10);
         	elevatorunits[i].setLayoutY((floorpaneheight/floornum)*(floornum-1));
+        	
         	elevatorunits[i].getChildren().addAll(elevatorunitbases[i], elevatorleftdoors[i],elevatorrightdoors[i]);
         	ElevatorUnitPane.getChildren().add(elevatorunits[i]);
+        	elevatorunits[i].setId("e"+i);
         }
-        
+    
         // Create scene and load css file
         Scene scene = new Scene(BottomPane, Stagewidth, Stageheight);
         scene.getStylesheets().add("gui_learning/application.css");
         primaryStage.setScene(scene);
-        primaryStage.show();
+    	Main.list.get(0).primaryStage = primaryStage;
+
+    	Main.list.get(0).primaryStage.show();
     }
     
     /************* Below are methods to build large panels for floor buttons, elevator buttons, and elevator units *************/
