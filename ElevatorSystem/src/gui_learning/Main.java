@@ -246,8 +246,8 @@ public class Main extends Application {
 	    	    		double cur_elelocation_y = ((Rectangle)elevrec.yProperty().getBean()).getY();
 	 	    	    	if (cur_elelocation_y != (Math.ceil((double)request)))
 	 	    	    	{
-	 	    	    		double durationtime1 = Math.abs(cur_elelocation_y-Math.ceil((double)request)*(double)(floorpaneheight/floornum))*10;
-		 	    	    	double durationtime2 = Math.abs(Math.ceil((double)request)*(double)(floorpaneheight/floornum)-cur_elelocation_y)*10;
+	 	    	    		double durationtime1 = Math.abs(cur_elelocation_y-Math.ceil((double)request)*constant)*10;
+		 	    	    	double durationtime2 = Math.abs(Math.ceil((double)request)*constant-cur_elelocation_y)*10;
 	 	    	    		Timeline moveing = new Timeline();
 	 	    	    		System.out.println(elevrec.yProperty()+ "---- , ----"+ request * constant);
 	 	    	    		
