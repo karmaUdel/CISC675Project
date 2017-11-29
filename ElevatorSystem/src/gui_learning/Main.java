@@ -137,7 +137,7 @@ public class Main extends Application {
           		//b.getStyleClass().removeAll("floorbutton, focus");
           	    //b.getStyleClass().add("buttonlit");          	
           	}
-        	Main.list.get(0).update(idint);
+        	Main.list.get(0).update(idint,s);
 			event.consume();
               // this will call schedule
               // use scheduler to call scheduler
@@ -242,20 +242,20 @@ public class Main extends Application {
 	    	    		Rectangle elevrec1 = (Rectangle)(elevatorunit.getChildren().get(1));
 	    	    		Rectangle elevrec2= (Rectangle)(elevatorunit.getChildren().get(2));
 	    	    		
-	 	    	    	
+	    	    		double constant = (double)(floorpaneheight/floornum);
 	    	    		double cur_elelocation_y = ((Rectangle)elevrec.yProperty().getBean()).getY();
 	 	    	    	if (cur_elelocation_y != (Math.ceil((double)request)))
 	 	    	    	{
 	 	    	    		double durationtime1 = Math.abs(cur_elelocation_y-Math.ceil((double)request)*(double)(floorpaneheight/floornum))*10;
 		 	    	    	double durationtime2 = Math.abs(Math.ceil((double)request)*(double)(floorpaneheight/floornum)-cur_elelocation_y)*10;
 	 	    	    		Timeline moveing = new Timeline();
-	 	    	    		System.out.println(elevrec.yProperty()+ "---- , ----"+ request * (double)(floorpaneheight/floornum));
+	 	    	    		System.out.println(elevrec.yProperty()+ "---- , ----"+ request * constant);
 	 	    	    		
 	 	    	    		if(cur_elelocation_y < (Math.ceil((double)request)))
 		 	    	    	{
-	 	    	    			final KeyValue kv=new KeyValue(elevrec.yProperty(), - request * (double)(floorpaneheight/floornum));  
-	 	    	    			final KeyValue kv1=new KeyValue(elevrec1.yProperty(),-  request * (double)(floorpaneheight/floornum));
-	 	    	    			final KeyValue kv2=new KeyValue(elevrec2.yProperty(), - request * (double)(floorpaneheight/floornum));
+	 	    	    			final KeyValue kv=new KeyValue(elevrec.yProperty(), - request * constant);  
+	 	    	    			final KeyValue kv1=new KeyValue(elevrec1.yProperty(),-  request * constant);
+	 	    	    			final KeyValue kv2=new KeyValue(elevrec2.yProperty(), - request * constant);
 	 	    	    			final KeyFrame kf=new KeyFrame(Duration.millis(durationtime1), kv);
 	 	    	    			final KeyFrame kf1=new KeyFrame(Duration.millis(durationtime1), kv1);
 	 	    	    			final KeyFrame kf2=new KeyFrame(Duration.millis(durationtime1), kv2);
@@ -284,7 +284,14 @@ public class Main extends Application {
 		 	    	    	    final KeyFrame kf2lit = new KeyFrame(Duration.millis(4000+durationtime1), kv2lit);
 		 	    	    	    litbutton.getKeyFrames().addAll(kf1lit,kf2lit); 
 		 	    	    	    //sequence.play();
-	 	    	    			System.out.println("durationtime1 "+durationtime1 + "   cur_elelocation_y "+ cur_elelocation_y);
+		 	    	    	    //calculating direction
+		 	    	    	    if( 0 < request - Math.abs( cur_elelocation_y/constant)) {
+			 	    	    		Main.list.get(0).getScheduler().getElevators()[elevator].setDirection(1);
+		 	    	    	    }else {
+			 	    	    		Main.list.get(0).getScheduler().getElevators()[elevator].setDirection(-1);		 	    	    	    	
+		 	    	    	    }
+//		 	    	    		Main.list.get(0).getScheduler().getElevators()[elevator].setDirection(request);
+		 	    	    	    System.out.println("durationtime1 "+durationtime1 + "   cur_elelocation_y "+ cur_elelocation_y);
 	 	    	    			ParallelTransition parallel = new ParallelTransition(sequence,litbutton);
 	 	    	    			parallel.play();
 		 	    	     
@@ -293,8 +300,8 @@ public class Main extends Application {
 	 	    	    		
 		 	    	    	else
 		 	    	    	{
-		 	    	    		final KeyValue kv=new KeyValue(elevrec.yProperty(), - request * (double)(floorpaneheight/floornum));  
-	 	    	    			final KeyValue kv1=new KeyValue(elevrec1.yProperty(),-  request * (double)(floorpaneheight/floornum));
+		 	    	    		final KeyValue kv=new KeyValue(elevrec.yProperty(), - request * constant );  
+	 	    	    			final KeyValue kv1=new KeyValue(elevrec1.yProperty(),-  request * constant);
 	 	    	    			final KeyValue kv2=new KeyValue(elevrec2.yProperty(), - request * (double)(floorpaneheight/floornum));
 		 	    	    	    		 	    	    
 	 	    	    			final KeyFrame kf=new KeyFrame(Duration.millis(durationtime2), kv);
@@ -326,6 +333,11 @@ public class Main extends Application {
 		 	    	    	
 		 	    	    	    
 		 	    	    	    //sequence.play();
+		 	    	    	    if( 0 < request - Math.abs( cur_elelocation_y/constant)) {
+			 	    	    		Main.list.get(0).getScheduler().getElevators()[elevator].setDirection(1);
+		 	    	    	    }else {
+			 	    	    		Main.list.get(0).getScheduler().getElevators()[elevator].setDirection(-1);		 	    	    	    	
+		 	    	    	    }
 		 	    	    	       	    	
 		 	    	    	    
 	 	    	    			System.out.println("durationtime1 "+durationtime1 + "   cur_elelocation_y "+ cur_elelocation_y);
@@ -340,8 +352,11 @@ public class Main extends Application {
 	 	    	    		//b.getStyleClass().removeAll("elevatorbutton, focus");
 	 	            	    //b.getStyleClass().add("buttonlit");		 	    	        
 	 	    	    	}
-	 	    	    	
-	 	    	    	
+	 	    	    	Main.list.get(0).getScheduler().getElevators()[elevator].setDirection(0);
+	 	    	    	Main.list.get(0).getScheduler().getElevators()[elevator].setLocation(request);
+	 	    	    	System.out.println("Location of elevator "+elevator +" is "+Main.list.get(0).getScheduler().getElevators()[elevator].getLocation());
+	 	    	    	System.out.println("Direction of elevator "+elevator +" is "+Main.list.get(0).getScheduler().getElevators()[elevator].getDirection());
+
 	 	    	    }
 	    	    	
 	    	    	
@@ -356,9 +371,9 @@ public class Main extends Application {
 	    	//task.travel
 	    	//call task
 	    }
-    	System.out.println(this);
+//    	System.out.println(this);
 
-    	System.out.println(this.scheduler);
+//    	System.out.println(this.scheduler);
     }
     
    
@@ -389,15 +404,21 @@ public class Main extends Application {
      * update for requests made from floor buttons
      * @param request
      */
-    public void update(Integer request) {
+    public void update(Integer request, String direction) {
     	if(this.scheduler!=null) {
-    		int elevatorTobeCalled = this.scheduler.schedulerAlgorithm(4, request);
-    	
+    		int elevatorTobeCalled = this.scheduler.schedulerAlgorithm(this.scheduler.algorithmSetting, request);
+    		System.out.println("elevatorId : "+elevatorTobeCalled);
     		Node eleanchorpane = ((BorderPane) this.primaryStage.getScene().getRoot()).getCenter();
 	    	Group ele = (Group) eleanchorpane.lookup("#e"+elevatorTobeCalled);
 	    	Node floorcontrolpane = ((BorderPane) this.primaryStage.getScene().getRoot()).getLeft();
-	    	VBox v = (VBox) floorcontrolpane.lookup("#fc"+elevatorTobeCalled);
-		    Button b = (Button) v.lookup("#"+elevatorTobeCalled);
+	    	VBox v = (VBox) floorcontrolpane.lookup("#fc"+request);
+	    	Button b ;
+	    	
+	    	if("UP".equalsIgnoreCase(direction)) {
+	    		b = (Button) v.lookup("#"+2*request);
+	    	}else {
+	    		b = (Button) v.lookup("#"+(2*request-1));
+	    	}
 	    	//Set<Node> set = eleanchorpane.lookupAll(selector)
 			System.out.println("Inside update" +ele);
 			System.out.println("Inside update" +v);
@@ -436,21 +457,21 @@ public class Main extends Application {
 	    	    		Rectangle elevrec = (Rectangle)(elevatorunit.getChildren().get(0));
 	    	    		Rectangle elevrec1 = (Rectangle)(elevatorunit.getChildren().get(1));
 	    	    		Rectangle elevrec2= (Rectangle)(elevatorunit.getChildren().get(2));
-	 	    	    	
+	    	    		double constant = (double)(floorpaneheight/floornum);
 	    	    		double cur_elelocation_y = ((Rectangle)elevrec.yProperty().getBean()).getY();
 	 	    	    	if (cur_elelocation_y != (Math.ceil((double)request)))
 	 	    	    	{
-	 	    	    		double durationtime1 = Math.abs(cur_elelocation_y-Math.ceil((double)request)*(double)(floorpaneheight/floornum))*10;
-		 	    	    	double durationtime2 = Math.abs(Math.ceil((double)request)*(double)(floorpaneheight/floornum)-cur_elelocation_y)*10;
+	 	    	    		double durationtime1 = Math.abs(cur_elelocation_y-Math.ceil((double)request)*constant)*10;
+		 	    	    	double durationtime2 = Math.abs(Math.ceil((double)request)*constant-cur_elelocation_y)*10;
 	 	    	    		//Timeline moveing = new Timeline();
-	 	    	    		System.out.println(elevrec.yProperty()+ "---- , ----"+ request * (double)(floorpaneheight/floornum));
+	 	    	    		System.out.println(elevrec.yProperty()+ "---- , ----"+ request * constant);
 	 	    	    		
 	 	    	    		if(cur_elelocation_y < (Math.ceil((double)request)))
 		 	    	    	{	
 	 	    	    			Timeline moveing = new Timeline();
-	 	    	    			final KeyValue kv=new KeyValue(elevrec.yProperty(), - request * (double)(floorpaneheight/floornum));  
-	 	    	    			final KeyValue kv1=new KeyValue(elevrec1.yProperty(),-  request * (double)(floorpaneheight/floornum));
-	 	    	    			final KeyValue kv2=new KeyValue(elevrec2.yProperty(), - request * (double)(floorpaneheight/floornum));
+	 	    	    			final KeyValue kv=new KeyValue(elevrec.yProperty(), - request * constant);  
+	 	    	    			final KeyValue kv1=new KeyValue(elevrec1.yProperty(),-  request * constant);
+	 	    	    			final KeyValue kv2=new KeyValue(elevrec2.yProperty(), - request * constant);
 	 	    	    			final KeyFrame kf=new KeyFrame(Duration.millis(durationtime1), kv);
 	 	    	    			final KeyFrame kf1=new KeyFrame(Duration.millis(durationtime1), kv1);
 	 	    	    			final KeyFrame kf2=new KeyFrame(Duration.millis(durationtime1), kv2);
@@ -481,6 +502,11 @@ public class Main extends Application {
 		 	    	    	
 		 	    	    	    
 		 	    	    	    //sequence.play();
+		 	    	    	    if( 0 < request - Math.abs( cur_elelocation_y/constant)) {
+			 	    	    		Main.list.get(0).getScheduler().getElevators()[elevatorTobeCalled].setDirection(1);
+		 	    	    	    }else {
+			 	    	    		Main.list.get(0).getScheduler().getElevators()[elevatorTobeCalled].setDirection(-1);		 	    	    	    	
+		 	    	    	    }
 		 	    	    	       	    	
 		 	    	    	    
 	 	    	    			System.out.println("durationtime1 "+durationtime1 + "   cur_elelocation_y "+ cur_elelocation_y);
@@ -492,9 +518,9 @@ public class Main extends Application {
 		 	    	    	else
 		 	    	    	{	
 		 	    	    		Timeline moveing = new Timeline();
-		 	    	    		final KeyValue kv=new KeyValue(elevrec.yProperty(), - request * (double)(floorpaneheight/floornum));  
-	 	    	    			final KeyValue kv1=new KeyValue(elevrec1.yProperty(),-  request * (double)(floorpaneheight/floornum));
-	 	    	    			final KeyValue kv2=new KeyValue(elevrec2.yProperty(), - request * (double)(floorpaneheight/floornum));
+		 	    	    		final KeyValue kv=new KeyValue(elevrec.yProperty(), - request * constant);  
+	 	    	    			final KeyValue kv1=new KeyValue(elevrec1.yProperty(),-  request * constant);
+	 	    	    			final KeyValue kv2=new KeyValue(elevrec2.yProperty(), - request * constant);
 		 	    	    	    		 	    	    
 	 	    	    			final KeyFrame kf=new KeyFrame(Duration.millis(durationtime2), kv);
 	 	    	    			final KeyFrame kf1=new KeyFrame(Duration.millis(durationtime2), kv1);
@@ -522,6 +548,11 @@ public class Main extends Application {
 		 	    	    	    final KeyFrame kf2lit = new KeyFrame(Duration.millis(4000+durationtime2), kv2lit);
 		 	    	    	    litbutton.getKeyFrames().addAll(kf1lit,kf2lit);
 		 	    	    	    
+		 	    	    	    if( 0 < request - Math.abs( cur_elelocation_y/constant)) {
+			 	    	    		Main.list.get(0).getScheduler().getElevators()[elevatorTobeCalled].setDirection(1);
+		 	    	    	    }else {
+			 	    	    		Main.list.get(0).getScheduler().getElevators()[elevatorTobeCalled].setDirection(-1);		 	    	    	    	
+		 	    	    	    }
 		 	    	    	    SequentialTransition sequence = new SequentialTransition(moveing, opendoors, closedoors);
 		 	    	    	    //sequence.play();
 		 	    	    	    ParallelTransition parallel = new ParallelTransition(sequence,litbutton);
@@ -537,7 +568,11 @@ public class Main extends Application {
 	 	    	    		//b.getStyleClass().removeAll("elevatorbutton, focus");
 	 	            	    //b.getStyleClass().add("buttonlit");		 	    	        
 	 	    	    	}
-	 	    	    	
+	 	    	    	Main.list.get(0).getScheduler().getElevators()[elevatorTobeCalled].setDirection(0);
+	 	    	    	Main.list.get(0).getScheduler().getElevators()[elevatorTobeCalled].setLocation(request);
+	 	    	    	System.out.println("Location of elevator "+elevatorTobeCalled +" is "+Main.list.get(0).getScheduler().getElevators()[elevatorTobeCalled].getLocation());
+	 	    	    	System.out.println("Direction of elevator "+elevatorTobeCalled +" is "+Main.list.get(0).getScheduler().getElevators()[elevatorTobeCalled].getDirection());
+ 	    	    	
 	 	    	    	
 	 	    	    }
 	    	    	

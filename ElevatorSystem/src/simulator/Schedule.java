@@ -9,7 +9,7 @@ package simulator;
  */
 public class Schedule {
 	ElevatorThread[] elevators;
-	public static final int FALSE = -999;
+	public static final int FALSE = 99999;
 	/**
 	 * Generic Constructor
 	 * Idea is , never use this constructor
@@ -60,7 +60,7 @@ public class Schedule {
 	 */
 	private int schedule1(int request) {
 		int i = 0;
-		int closest = 0;
+		int closest = FALSE;
 		int val = 0;
 		int closestElevator = 0;
 		while(i<this.elevators.length) {
@@ -83,12 +83,13 @@ public class Schedule {
 	 */
 	private int schedule2(int request) {
 		int i = 0;
-		int closest = 0;
+		int closest = FALSE;
 		int val = 0;
 		int closestElevator = 0;
 		while(i<this.elevators.length) {
 			if(!this.elevators[i].isMoving()) { // if not moving
 				val = Math.abs(getClosest(false, this.elevators[i].getDirection(),request, i));
+				System.out.println("Inside schedule2 :: val :"+val +" closest: "+closest+"\n");
 				if(val!=FALSE) {
 					if(val<closest) {
 						closest = val;
@@ -112,7 +113,7 @@ public class Schedule {
 	 */
 	private int schedule3(int request) {
 		int i = 0;
-		int closest = 0;
+		int closest = FALSE;
 		int val = 0;
 		int closestElevator = 0;
 		while(i<this.elevators.length) {
@@ -135,7 +136,7 @@ public class Schedule {
 	 */
 	private int scheduleDefault(int request) {
 		int i = 0;
-		int closest = 0;
+		int closest = FALSE;
 		int val = 0;
 		int closestElevator = 0;
 		while(i<this.elevators.length) {
@@ -155,7 +156,7 @@ public class Schedule {
 	 * True means we can call the requested lift, False means we can't
 	 */
 	private int getClosest(boolean moving, int direction,int destination, int elevatorId) {
-		int val = destination - elevators[elevatorId].getLocation();
+		int val = Math.abs(destination - elevators[elevatorId].getLocation());
 		if(moving) {
 			if(direction==1) {
 				return val; //going up or down
