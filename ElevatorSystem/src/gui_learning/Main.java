@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
+import javafx.animation.SequentialTransition;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.collections.ObservableMap;
@@ -153,14 +154,14 @@ public class Main extends Application {
         		//up clicked
         	    //System.out.println(elevatorId);
         	    //System.out.println(buttonId);
-        	    b.getStyleClass().removeAll("elevatorbutton, focus");
-          	    b.getStyleClass().add("buttonlit");
+        	    //b.getStyleClass().removeAll("elevatorbutton, focus");
+          	    //b.getStyleClass().add("buttonlit");
         	}else{
         		//down clicked
         		//System.out.println(elevatorId);
         		//System.out.println(buttonId);
-        		 b.getStyleClass().removeAll("elevatorbutton, focus");
-           	    b.getStyleClass().add("buttonlit");
+        		 //b.getStyleClass().removeAll("elevatorbutton, focus");
+           	    //b.getStyleClass().add("buttonlit");
         	}
         	Main.list.get(0).update(elevatorId,buttonId);
 		    event.consume();
@@ -192,15 +193,22 @@ public class Main extends Application {
 	    	
 	    	Node eleanchorpane = ((BorderPane) this.primaryStage.getScene().getRoot()).getCenter();
 	    	Group ele = (Group) eleanchorpane.lookup("#e"+elevator);
+	    	Node elecontrolpane = ((BorderPane) this.primaryStage.getScene().getRoot()).getBottom();
+	    	TilePane t = (TilePane) elecontrolpane.lookup("#ec"+elevator);
+		    Button b = (Button) t.lookup("#"+elevator+"_"+request);
 	    	//Set<Node> set = eleanchorpane.lookupAll(selector)
 			System.out.println("Inside update" +ele);
-	    	
+			System.out.println("Inside update" +t);
+			System.out.println("Inside update" +b);
+			
 	    	Task elevatormove = new Task()
 	    	    {
 	    		@Override
 	    		protected Integer call() throws Exception{
 	    			System.out.println("Inside call" +ele);
-	    			travel(ele);
+	    			System.out.println("Inside call" +b);
+	    			System.out.println("Inside call" +t);
+	    			travel(ele,b);
 	    			return 1;
    
 	    		}
@@ -210,30 +218,91 @@ public class Main extends Application {
 	    	    		 return null;
 	    	    	 }*/
 	    	    	 
-	    	    	 public void travel(Group elevatorunit)
+	    	    	 public void travel(Group elevatorunit, Button b)
 	 	    	    {
 	    	    		 System.out.println("Inside travel");
 	    	    		Rectangle elevrec = (Rectangle)(elevatorunit.getChildren().get(0));
 	    	    		Rectangle elevrec1 = (Rectangle)(elevatorunit.getChildren().get(1));
 	    	    		Rectangle elevrec2= (Rectangle)(elevatorunit.getChildren().get(2));
 	 	    	    	
-	    	    		double cur_elelocation_y = elevrec.getLayoutY();
-	 	    	    	if (cur_elelocation_y != (Math.ceil((double)request/2)))
+	    	    		double cur_elelocation_y = ((Rectangle)elevrec.yProperty().getBean()).getY();
+	 	    	    	if (cur_elelocation_y != (Math.ceil((double)request)))
 	 	    	    	{
+	 	    	    		double durationtime1 = Math.abs(cur_elelocation_y-Math.ceil((double)request)*(double)(floorpaneheight/floornum))*10;
+		 	    	    	double durationtime2 = Math.abs(Math.ceil((double)request)*(double)(floorpaneheight/floornum)-cur_elelocation_y)*10;
 	 	    	    		Timeline moveing = new Timeline();
 	 	    	    		System.out.println(elevrec.yProperty()+ "---- , ----"+ request * (double)(floorpaneheight/floornum));
-		 	    	    	final KeyValue kv=new KeyValue(elevrec.yProperty(), - request * (double)(floorpaneheight/floornum));  
-		 	    	    	final KeyValue kv1=new KeyValue(elevrec1.yProperty(),-  request * (double)(floorpaneheight/floornum));
-		 	    	    	final KeyValue kv2=new KeyValue(elevrec2.yProperty(), - request * (double)(floorpaneheight/floornum));
-		 	    	        final KeyFrame kf=new KeyFrame((Duration.millis(Math.abs(cur_elelocation_y-Math.ceil((double)request/2))*1000)), kv);
-		 	    	        final KeyFrame kf1=new KeyFrame((Duration.millis(Math.abs(cur_elelocation_y-Math.ceil((double)request/2))*1000)), kv1);
-		 	    	        final KeyFrame kf2=new KeyFrame((Duration.millis(Math.abs(cur_elelocation_y-Math.ceil((double)request/2))*1000)), kv2);
-		 	    	        moveing.getKeyFrames().addAll(kf,kf1,kf2);  
-		 	    	        moveing.play();
+	 	    	    		
+	 	    	    		if(cur_elelocation_y < (Math.ceil((double)request)))
+		 	    	    	{
+	 	    	    			final KeyValue kv=new KeyValue(elevrec.yProperty(), - request * (double)(floorpaneheight/floornum));  
+	 	    	    			final KeyValue kv1=new KeyValue(elevrec1.yProperty(),-  request * (double)(floorpaneheight/floornum));
+	 	    	    			final KeyValue kv2=new KeyValue(elevrec2.yProperty(), - request * (double)(floorpaneheight/floornum));
+	 	    	    			final KeyFrame kf=new KeyFrame(Duration.millis(durationtime1), kv);
+	 	    	    			final KeyFrame kf1=new KeyFrame(Duration.millis(durationtime1), kv1);
+	 	    	    			final KeyFrame kf2=new KeyFrame(Duration.millis(durationtime1), kv2);
+	 	    	    			moveing.getKeyFrames().addAll(kf,kf1,kf2);
+	 	    	    			
+	 	    	    			Timeline opendoors = new Timeline();
+	 	    	    			final KeyValue kv1open = new KeyValue(elevrec1.xProperty(),((Rectangle)elevrec.xProperty().getBean()).getX() - elevrec1.getWidth());
+		 	    	    	    final KeyValue kv2open = new KeyValue(elevrec2.xProperty(),((Rectangle)elevrec.xProperty().getBean()).getX() + elevrec2.getWidth());
+		 	    	    	    final KeyFrame kf1open = new KeyFrame(Duration.millis(2000), kv1open);
+		 	    	    	    final KeyFrame kf2open = new KeyFrame(Duration.millis(2000), kv2open);
+		 	    	    	    opendoors.getKeyFrames().addAll(kf1open,kf2open);
+		 	    	    	    
+		 	    	    	    Timeline closedoors = new Timeline();
+	 	    	    			final KeyValue kv1close = new KeyValue(elevrec1.xProperty(),((Rectangle)elevrec.xProperty().getBean()).getX());
+		 	    	    	    final KeyValue kv2close = new KeyValue(elevrec2.xProperty(),((Rectangle)elevrec.xProperty().getBean()).getX());
+		 	    	    	    final KeyFrame kf1close = new KeyFrame(Duration.millis(2000), kv1close);
+		 	    	    	    final KeyFrame kf2close = new KeyFrame(Duration.millis(2000), kv2close);
+		 	    	    	    closedoors.getKeyFrames().addAll(kf1close,kf2close);
+		 	    	    	    
+		 	    	    	    SequentialTransition sequence = new SequentialTransition(moveing, opendoors, closedoors);
+		 	    	    	    sequence.play();
+		 	    	    	       	    	
+		 	    	    	    
+	 	    	    			System.out.println("durationtime1 "+durationtime1 + "   cur_elelocation_y "+ cur_elelocation_y);
+		 	    	        }
+		 	    	    	else
+		 	    	    	{
+		 	    	    		final KeyValue kv=new KeyValue(elevrec.yProperty(), - request * (double)(floorpaneheight/floornum));  
+	 	    	    			final KeyValue kv1=new KeyValue(elevrec1.yProperty(),-  request * (double)(floorpaneheight/floornum));
+	 	    	    			final KeyValue kv2=new KeyValue(elevrec2.yProperty(), - request * (double)(floorpaneheight/floornum));
+		 	    	    	    		 	    	    
+	 	    	    			final KeyFrame kf=new KeyFrame(Duration.millis(durationtime2), kv);
+	 	    	    			final KeyFrame kf1=new KeyFrame(Duration.millis(durationtime2), kv1);
+	 	    	    			final KeyFrame kf2=new KeyFrame(Duration.millis(durationtime2), kv2);
+	 	    	    			moveing.getKeyFrames().addAll(kf,kf1,kf2);  
+	 	    	    			
+	 	    	    			Timeline opendoors = new Timeline();
+	 	    	    			final KeyValue kv1open = new KeyValue(elevrec1.xProperty(),((Rectangle)elevrec1.xProperty().getBean()).getX() -elevrec1.getWidth());
+		 	    	    	    final KeyValue kv2open = new KeyValue(elevrec2.xProperty(),((Rectangle)elevrec2.xProperty().getBean()).getX() +elevrec2.getWidth());
+		 	    	    	    final KeyFrame kf1open = new KeyFrame(Duration.millis(2000), kv1open);
+		 	    	    	    final KeyFrame kf2open = new KeyFrame(Duration.millis(2000), kv2open);
+		 	    	    	    opendoors.getKeyFrames().addAll(kf1open,kf2open);
+		 	    	    	    
+		 	    	    	    Timeline closedoors = new Timeline();
+	 	    	    			final KeyValue kv1close = new KeyValue(elevrec1.xProperty(),((Rectangle)elevrec1.xProperty().getBean()).getX() +elevrec1.getWidth());
+		 	    	    	    final KeyValue kv2close = new KeyValue(elevrec2.xProperty(),((Rectangle)elevrec2.xProperty().getBean()).getX() -elevrec2.getWidth());
+		 	    	    	    final KeyFrame kf1close = new KeyFrame(Duration.millis(2000), kv1close);
+		 	    	    	    final KeyFrame kf2close = new KeyFrame(Duration.millis(2000), kv2close);
+		 	    	    	    closedoors.getKeyFrames().addAll(kf1close,kf2close);
+		 	    	    	    
+		 	    	    	  
+		 	    	    	    //b.getStyleClass().removeAll("elevatorbutton, focus");
+		 	            	    //b.getStyleClass().add("buttonoff");
+		 	            	    
+	 	    	    			System.out.println("durationtime2 "+durationtime2 + "   cur_elelocation_y "+ cur_elelocation_y);
+		 	    	    	}
+	 	    	    	
+	 	    	    		b.getStyleClass().removeAll("elevatorbutton, focus");
+	 	            	    b.getStyleClass().add("buttonlit");		 	    	        
 	 	    	    	}
 	 	    	    	
 	 	    	    	
 	 	    	    }
+	    	    	
+	    	    	
 	    	    };
 	    	    Thread x = new Thread(elevatormove);
 	    	    x.run();
@@ -282,6 +351,132 @@ public class Main extends Application {
     	if(this.scheduler!=null) {
     		int elevatorTobeCalled = this.scheduler.schedulerAlgorithm(4, request);
     	
+    		Node eleanchorpane = ((BorderPane) this.primaryStage.getScene().getRoot()).getCenter();
+	    	Group ele = (Group) eleanchorpane.lookup("#e"+elevatorTobeCalled);
+	    	Node floorcontrolpane = ((BorderPane) this.primaryStage.getScene().getRoot()).getLeft();
+	    	VBox v = (VBox) floorcontrolpane.lookup("#fc"+elevatorTobeCalled);
+		    Button b = (Button) v.lookup("#"+elevatorTobeCalled);
+	    	//Set<Node> set = eleanchorpane.lookupAll(selector)
+			System.out.println("Inside update" +ele);
+			System.out.println("Inside update" +v);
+			System.out.println("Inside update" +b);
+			
+	    	Task elevatormove = new Task()
+	    	    {
+	    		@Override
+	    		protected Integer call() throws Exception{
+	    			System.out.println("Inside call" +ele);
+	    			System.out.println("Inside call" +b);
+	    			System.out.println("Inside call" +v);
+	    			travel(ele,b);
+	    			return 1;
+   
+	    		}
+	    	    	/* @Override public Void call() 
+	    	    	 {
+	    	    		 travel(ele);
+	    	    		 return null;
+	    	    	 }*/
+	    	    	 
+	    	    	 public void travel(Group elevatorunit, Button b)
+	 	    	    {
+	    	    		 System.out.println("Inside travel");
+	    	    		Rectangle elevrec = (Rectangle)(elevatorunit.getChildren().get(0));
+	    	    		Rectangle elevrec1 = (Rectangle)(elevatorunit.getChildren().get(1));
+	    	    		Rectangle elevrec2= (Rectangle)(elevatorunit.getChildren().get(2));
+	 	    	    	
+	    	    		double cur_elelocation_y = ((Rectangle)elevrec.yProperty().getBean()).getY();
+	 	    	    	if (cur_elelocation_y != (Math.ceil((double)request)))
+	 	    	    	{
+	 	    	    		double durationtime1 = Math.abs(cur_elelocation_y-Math.ceil((double)request)*(double)(floorpaneheight/floornum))*10;
+		 	    	    	double durationtime2 = Math.abs(Math.ceil((double)request)*(double)(floorpaneheight/floornum)-cur_elelocation_y)*10;
+	 	    	    		//Timeline moveing = new Timeline();
+	 	    	    		System.out.println(elevrec.yProperty()+ "---- , ----"+ request * (double)(floorpaneheight/floornum));
+	 	    	    		
+	 	    	    		if(cur_elelocation_y < (Math.ceil((double)request)))
+		 	    	    	{	
+	 	    	    			Timeline moveing = new Timeline();
+	 	    	    			final KeyValue kv=new KeyValue(elevrec.yProperty(), - request * (double)(floorpaneheight/floornum));  
+	 	    	    			final KeyValue kv1=new KeyValue(elevrec1.yProperty(),-  request * (double)(floorpaneheight/floornum));
+	 	    	    			final KeyValue kv2=new KeyValue(elevrec2.yProperty(), - request * (double)(floorpaneheight/floornum));
+	 	    	    			final KeyFrame kf=new KeyFrame(Duration.millis(durationtime1), kv);
+	 	    	    			final KeyFrame kf1=new KeyFrame(Duration.millis(durationtime1), kv1);
+	 	    	    			final KeyFrame kf2=new KeyFrame(Duration.millis(durationtime1), kv2);
+	 	    	    			moveing.getKeyFrames().addAll(kf,kf1,kf2);
+	 	    	    			
+	 	    	    			Timeline opendoors = new Timeline();
+	 	    	    			final KeyValue kv1open = new KeyValue(elevrec1.xProperty(),((Rectangle)elevrec.xProperty().getBean()).getX() - elevrec1.getWidth());
+		 	    	    	    final KeyValue kv2open = new KeyValue(elevrec2.xProperty(),((Rectangle)elevrec.xProperty().getBean()).getX() + elevrec2.getWidth());
+		 	    	    	    final KeyFrame kf1open = new KeyFrame(Duration.millis(2000), kv1open);
+		 	    	    	    final KeyFrame kf2open = new KeyFrame(Duration.millis(2000), kv2open);
+		 	    	    	    opendoors.getKeyFrames().addAll(kf1open,kf2open);
+		 	    	    	    
+		 	    	    	    Timeline closedoors = new Timeline();
+	 	    	    			final KeyValue kv1close = new KeyValue(elevrec1.xProperty(),((Rectangle)elevrec.xProperty().getBean()).getX());
+		 	    	    	    final KeyValue kv2close = new KeyValue(elevrec2.xProperty(),((Rectangle)elevrec.xProperty().getBean()).getX());
+		 	    	    	    final KeyFrame kf1close = new KeyFrame(Duration.millis(2000), kv1close);
+		 	    	    	    final KeyFrame kf2close = new KeyFrame(Duration.millis(2000), kv2close);
+		 	    	    	    closedoors.getKeyFrames().addAll(kf1close,kf2close);
+		 	    	    	    
+		 	    	    	    SequentialTransition sequence = new SequentialTransition(moveing, opendoors, closedoors);
+		 	    	    	    
+		 	    	    	    Timeline litbutton = new Timeline();
+		 	    	    	    KeyValue lit1 = new KeyValue(b.setEffect(value));
+		 	    	    	    KeyValue lit2 = new KeyValue(b.scaleYProperty(), 5);
+		 	    	    	    
+		 	    	    	    sequence.play();
+		 	    	    	       	    	
+		 	    	    	    
+	 	    	    			System.out.println("durationtime1 "+durationtime1 + "   cur_elelocation_y "+ cur_elelocation_y);
+	 	    	    			System.out.println((int)durationtime1+ "," +(int)durationtime2);
+		 	    	        }
+		 	    	    	else
+		 	    	    	{	
+		 	    	    		Timeline moveing = new Timeline();
+		 	    	    		final KeyValue kv=new KeyValue(elevrec.yProperty(), - request * (double)(floorpaneheight/floornum));  
+	 	    	    			final KeyValue kv1=new KeyValue(elevrec1.yProperty(),-  request * (double)(floorpaneheight/floornum));
+	 	    	    			final KeyValue kv2=new KeyValue(elevrec2.yProperty(), - request * (double)(floorpaneheight/floornum));
+		 	    	    	    		 	    	    
+	 	    	    			final KeyFrame kf=new KeyFrame(Duration.millis(durationtime2), kv);
+	 	    	    			final KeyFrame kf1=new KeyFrame(Duration.millis(durationtime2), kv1);
+	 	    	    			final KeyFrame kf2=new KeyFrame(Duration.millis(durationtime2), kv2);
+	 	    	    			moveing.getKeyFrames().addAll(kf,kf1,kf2);  
+	 	    	    			
+	 	    	    			Timeline opendoors = new Timeline();
+	 	    	    			final KeyValue kv1open = new KeyValue(elevrec1.xProperty(),((Rectangle)elevrec1.xProperty().getBean()).getX() -elevrec1.getWidth());
+		 	    	    	    final KeyValue kv2open = new KeyValue(elevrec2.xProperty(),((Rectangle)elevrec2.xProperty().getBean()).getX() +elevrec2.getWidth());
+		 	    	    	    final KeyFrame kf1open = new KeyFrame(Duration.millis(2000), kv1open);
+		 	    	    	    final KeyFrame kf2open = new KeyFrame(Duration.millis(2000), kv2open);
+		 	    	    	    opendoors.getKeyFrames().addAll(kf1open,kf2open);
+		 	    	    	    
+		 	    	    	    Timeline closedoors = new Timeline();
+	 	    	    			final KeyValue kv1close = new KeyValue(elevrec1.xProperty(),((Rectangle)elevrec1.xProperty().getBean()).getX() +elevrec1.getWidth());
+		 	    	    	    final KeyValue kv2close = new KeyValue(elevrec2.xProperty(),((Rectangle)elevrec2.xProperty().getBean()).getX() -elevrec2.getWidth());
+		 	    	    	    final KeyFrame kf1close = new KeyFrame(Duration.millis(2000), kv1close);
+		 	    	    	    final KeyFrame kf2close = new KeyFrame(Duration.millis(2000), kv2close);
+		 	    	    	    closedoors.getKeyFrames().addAll(kf1close,kf2close);
+		 	    	    	    
+		 	    	    	    SequentialTransition sequence = new SequentialTransition(moveing, opendoors, closedoors);
+		 	    	    	    sequence.play();
+		 	    	    	  
+		 	    	    	    //b.getStyleClass().removeAll("elevatorbutton, focus");
+		 	            	    //b.getStyleClass().add("buttonoff");
+		 	            	    
+	 	    	    			System.out.println("durationtime2 "+durationtime2 + "   cur_elelocation_y "+ cur_elelocation_y);
+	 	    	    			System.out.println((int)durationtime1+ "," +(int)durationtime2);
+		 	    	    	}
+	 	    	    	
+	 	    	    		b.getStyleClass().removeAll("elevatorbutton, focus");
+	 	            	    b.getStyleClass().add("buttonlit");		 	    	        
+	 	    	    	}
+	 	    	    	
+	 	    	    	
+	 	    	    }
+	    	    	
+	    	    	
+	    	    };
+	    	    Thread x = new Thread(elevatormove);
+	    	    x.run();
     	// call the elevator and do something
     		// set to destinationList
     		// move the elevator
@@ -378,6 +573,7 @@ public class Main extends Application {
         	
         	floorspane[i].getStyleClass().add("floorspane"); 
         	floorspane[i].setPadding(new Insets(10, 70, 10, 70)); 
+        	floorspane[i].setId("fc"+i);
         	FloorPane.getChildren().add(floorspane[i]);
         }
         
@@ -418,7 +614,9 @@ public class Main extends Application {
         	elevatorspane[i].setPadding(new Insets(10, 10, 10, 10));
         	elevatorspane[i].setVgap(10);
         	elevatorspane[i].setHgap(10);
+        	elevatorspane[i].setId("ec"+i);
         	ElevatorPane.getChildren().add(elevatorspane[i]); 
+        	
         	
         	for(int j=0; j<floornum; j++)
         	{
