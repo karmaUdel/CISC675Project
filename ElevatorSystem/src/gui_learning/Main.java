@@ -7,9 +7,13 @@ import java.util.ArrayList;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
+import javafx.animation.ParallelTransition;
 import javafx.animation.SequentialTransition;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.ObservableMap;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -21,6 +25,9 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.effect.Blend;
+import javafx.scene.effect.BlendMode;
+import javafx.scene.effect.ColorInput;
 import javafx.scene.input.InputEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -120,15 +127,15 @@ public class Main extends Application {
           	{
           		//up clicked
           	    //System.out.println(idint);
-          	    b.getStyleClass().removeAll("floorbutton, focus");
-          	    b.getStyleClass().add("buttonlit");          	    
+          	    //b.getStyleClass().removeAll("floorbutton, focus");
+          	    //b.getStyleClass().add("buttonlit");          	    
           	}
           	else if ("Down".equalsIgnoreCase(s))
           	{
           		//down clicked
           		//System.out.println(idint);
-          		b.getStyleClass().removeAll("floorbutton, focus");
-          	    b.getStyleClass().add("buttonlit");          	
+          		//b.getStyleClass().removeAll("floorbutton, focus");
+          	    //b.getStyleClass().add("buttonlit");          	
           	}
         	Main.list.get(0).update(idint);
 			event.consume();
@@ -196,6 +203,16 @@ public class Main extends Application {
 	    	Node elecontrolpane = ((BorderPane) this.primaryStage.getScene().getRoot()).getBottom();
 	    	TilePane t = (TilePane) elecontrolpane.lookup("#ec"+elevator);
 		    Button b = (Button) t.lookup("#"+elevator+"_"+request);
+		    Blend blendEffect = new Blend(BlendMode.DIFFERENCE);
+			ColorInput input = new ColorInput();
+		    blendEffect.setTopInput(input);
+			input.widthProperty().bind(b.widthProperty());
+			input.heightProperty().bind(b.heightProperty());
+			b.setEffect(blendEffect);
+			b.setStyle("-fx-body-color: orange;");
+			DoubleProperty brightness = new SimpleDoubleProperty(0);
+			input.paintProperty().bind(Bindings.createObjectBinding(() -> Color.BLACK.interpolate(Color.WHITE, brightness.get()), brightness));
+	    	 
 	    	//Set<Node> set = eleanchorpane.lookupAll(selector)
 			System.out.println("Inside update" +ele);
 			System.out.println("Inside update" +t);
@@ -224,6 +241,7 @@ public class Main extends Application {
 	    	    		Rectangle elevrec = (Rectangle)(elevatorunit.getChildren().get(0));
 	    	    		Rectangle elevrec1 = (Rectangle)(elevatorunit.getChildren().get(1));
 	    	    		Rectangle elevrec2= (Rectangle)(elevatorunit.getChildren().get(2));
+	    	    		
 	 	    	    	
 	    	    		double cur_elelocation_y = ((Rectangle)elevrec.yProperty().getBean()).getY();
 	 	    	    	if (cur_elelocation_y != (Math.ceil((double)request)))
@@ -258,11 +276,21 @@ public class Main extends Application {
 		 	    	    	    closedoors.getKeyFrames().addAll(kf1close,kf2close);
 		 	    	    	    
 		 	    	    	    SequentialTransition sequence = new SequentialTransition(moveing, opendoors, closedoors);
-		 	    	    	    sequence.play();
-		 	    	    	       	    	
 		 	    	    	    
+		 	    	    	    Timeline litbutton = new Timeline();
+		 	    	    	    KeyValue kv1lit = new KeyValue(brightness, 0d);
+		 	    	    	    KeyValue kv2lit = new KeyValue(brightness, 1d);
+		 	    	    	    final KeyFrame kf1lit = new KeyFrame(Duration.ZERO, kv1lit);
+		 	    	    	    final KeyFrame kf2lit = new KeyFrame(Duration.millis(4000+durationtime1), kv2lit);
+		 	    	    	    litbutton.getKeyFrames().addAll(kf1lit,kf2lit); 
+		 	    	    	    //sequence.play();
+	 	    	    			System.out.println("durationtime1 "+durationtime1 + "   cur_elelocation_y "+ cur_elelocation_y);
+	 	    	    			ParallelTransition parallel = new ParallelTransition(sequence,litbutton);
+	 	    	    			parallel.play();
+		 	    	     
 	 	    	    			System.out.println("durationtime1 "+durationtime1 + "   cur_elelocation_y "+ cur_elelocation_y);
 		 	    	        }
+	 	    	    		
 		 	    	    	else
 		 	    	    	{
 		 	    	    		final KeyValue kv=new KeyValue(elevrec.yProperty(), - request * (double)(floorpaneheight/floornum));  
@@ -287,16 +315,30 @@ public class Main extends Application {
 		 	    	    	    final KeyFrame kf1close = new KeyFrame(Duration.millis(2000), kv1close);
 		 	    	    	    final KeyFrame kf2close = new KeyFrame(Duration.millis(2000), kv2close);
 		 	    	    	    closedoors.getKeyFrames().addAll(kf1close,kf2close);
+		 	    	    	    SequentialTransition sequence = new SequentialTransition(moveing, opendoors, closedoors);
+		 	    	    	   
+		 	    	    	    Timeline litbutton = new Timeline();
+		 	    	    	    KeyValue kv1lit = new KeyValue(brightness, 0d);
+		 	    	    	    KeyValue kv2lit = new KeyValue(brightness, 1d);
+		 	    	    	    final KeyFrame kf1lit = new KeyFrame(Duration.ZERO, kv1lit);
+		 	    	    	    final KeyFrame kf2lit = new KeyFrame(Duration.millis(4000+durationtime2), kv2lit);
+		 	    	    	    litbutton.getKeyFrames().addAll(kf1lit,kf2lit);
+		 	    	    	
 		 	    	    	    
-		 	    	    	  
+		 	    	    	    //sequence.play();
+		 	    	    	       	    	
+		 	    	    	    
+	 	    	    			System.out.println("durationtime1 "+durationtime1 + "   cur_elelocation_y "+ cur_elelocation_y);
+	 	    	    			ParallelTransition parallel = new ParallelTransition(sequence,litbutton);
+	 	    	    			parallel.play();
 		 	    	    	    //b.getStyleClass().removeAll("elevatorbutton, focus");
 		 	            	    //b.getStyleClass().add("buttonoff");
 		 	            	    
 	 	    	    			System.out.println("durationtime2 "+durationtime2 + "   cur_elelocation_y "+ cur_elelocation_y);
 		 	    	    	}
 	 	    	    	
-	 	    	    		b.getStyleClass().removeAll("elevatorbutton, focus");
-	 	            	    b.getStyleClass().add("buttonlit");		 	    	        
+	 	    	    		//b.getStyleClass().removeAll("elevatorbutton, focus");
+	 	            	    //b.getStyleClass().add("buttonlit");		 	    	        
 	 	    	    	}
 	 	    	    	
 	 	    	    	
@@ -361,7 +403,17 @@ public class Main extends Application {
 			System.out.println("Inside update" +v);
 			System.out.println("Inside update" +b);
 			
-	    	Task elevatormove = new Task()
+			 Blend blendEffect = new Blend(BlendMode.DIFFERENCE);
+			 ColorInput input = new ColorInput();
+			 blendEffect.setTopInput(input);
+			 input.widthProperty().bind(b.widthProperty());
+			 input.heightProperty().bind(b.heightProperty());
+			 b.setEffect(blendEffect);
+			 b.setStyle("-fx-body-color: orange;");
+			 DoubleProperty brightness = new SimpleDoubleProperty(0);
+			 input.paintProperty().bind(Bindings.createObjectBinding(() -> Color.BLACK.interpolate(Color.WHITE, brightness.get()), brightness));
+	    	 
+			 Task elevatormove = new Task()
 	    	    {
 	    		@Override
 	    		protected Integer call() throws Exception{
@@ -421,13 +473,20 @@ public class Main extends Application {
 		 	    	    	    SequentialTransition sequence = new SequentialTransition(moveing, opendoors, closedoors);
 		 	    	    	    
 		 	    	    	    Timeline litbutton = new Timeline();
-		 	    	    	    KeyValue lit1 = new KeyValue(b.setEffect(value));
-		 	    	    	    KeyValue lit2 = new KeyValue(b.scaleYProperty(), 5);
+		 	    	    	    KeyValue kv1lit = new KeyValue(brightness, 0d);
+		 	    	    	    KeyValue kv2lit = new KeyValue(brightness, 1d);
+		 	    	    	    final KeyFrame kf1lit = new KeyFrame(Duration.ZERO, kv1lit);
+		 	    	    	    final KeyFrame kf2lit = new KeyFrame(Duration.millis(4000+durationtime1), kv2lit);
+		 	    	    	    litbutton.getKeyFrames().addAll(kf1lit,kf2lit);
+		 	    	    	
 		 	    	    	    
-		 	    	    	    sequence.play();
+		 	    	    	    //sequence.play();
 		 	    	    	       	    	
 		 	    	    	    
 	 	    	    			System.out.println("durationtime1 "+durationtime1 + "   cur_elelocation_y "+ cur_elelocation_y);
+	 	    	    			ParallelTransition parallel = new ParallelTransition(sequence,litbutton);
+	 	    	    			parallel.play();
+	 	    	    			
 	 	    	    			System.out.println((int)durationtime1+ "," +(int)durationtime2);
 		 	    	        }
 		 	    	    	else
@@ -456,8 +515,17 @@ public class Main extends Application {
 		 	    	    	    final KeyFrame kf2close = new KeyFrame(Duration.millis(2000), kv2close);
 		 	    	    	    closedoors.getKeyFrames().addAll(kf1close,kf2close);
 		 	    	    	    
+		 	    	    	    Timeline litbutton = new Timeline();
+		 	    	    	    KeyValue kv1lit = new KeyValue(brightness, 0d);
+		 	    	    	    KeyValue kv2lit = new KeyValue(brightness, 1d);
+		 	    	    	    final KeyFrame kf1lit = new KeyFrame(Duration.ZERO, kv1lit);
+		 	    	    	    final KeyFrame kf2lit = new KeyFrame(Duration.millis(4000+durationtime2), kv2lit);
+		 	    	    	    litbutton.getKeyFrames().addAll(kf1lit,kf2lit);
+		 	    	    	    
 		 	    	    	    SequentialTransition sequence = new SequentialTransition(moveing, opendoors, closedoors);
-		 	    	    	    sequence.play();
+		 	    	    	    //sequence.play();
+		 	    	    	    ParallelTransition parallel = new ParallelTransition(sequence,litbutton);
+	 	    	    			parallel.play();
 		 	    	    	  
 		 	    	    	    //b.getStyleClass().removeAll("elevatorbutton, focus");
 		 	            	    //b.getStyleClass().add("buttonoff");
@@ -466,8 +534,8 @@ public class Main extends Application {
 	 	    	    			System.out.println((int)durationtime1+ "," +(int)durationtime2);
 		 	    	    	}
 	 	    	    	
-	 	    	    		b.getStyleClass().removeAll("elevatorbutton, focus");
-	 	            	    b.getStyleClass().add("buttonlit");		 	    	        
+	 	    	    		//b.getStyleClass().removeAll("elevatorbutton, focus");
+	 	            	    //b.getStyleClass().add("buttonlit");		 	    	        
 	 	    	    	}
 	 	    	    	
 	 	    	    	
