@@ -81,9 +81,9 @@ public class Main extends Application {
 			this.floorpanewidth = 200;
 			this.Stagewidth = 1800;
 			this.Stageheight = 900;
-			System.out.println(this);
+			//System.out.println(this);
 			list.add(this);
-			System.out.println(this.scheduler);
+			//System.out.println(this.scheduler);
 	    }
 	    public Main getInstance() {
 	        return this;
@@ -126,14 +126,14 @@ public class Main extends Application {
           	if("Up".equalsIgnoreCase(s))
           	{
           		//up clicked
-          	    //System.out.println(idint);
+          	    ////System.out.println(idint);
           	    //b.getStyleClass().removeAll("floorbutton, focus");
           	    //b.getStyleClass().add("buttonlit");          	    
           	}
           	else if ("Down".equalsIgnoreCase(s))
           	{
           		//down clicked
-          		//System.out.println(idint);
+          		////System.out.println(idint);
           		//b.getStyleClass().removeAll("floorbutton, focus");
           	    //b.getStyleClass().add("buttonlit");          	
           	}
@@ -156,17 +156,17 @@ public class Main extends Application {
         	String[] splittedId= id.split("_"); // id is of form #elevatorId_#buttonId
         	int elevatorId = Integer.parseInt(splittedId[0]);
         	int buttonId = Integer.parseInt(splittedId[1]);
-        	//System.out.println(event);
+        	////System.out.println(event);
         	if("Up".equalsIgnoreCase(s)){
         		//up clicked
-        	    //System.out.println(elevatorId);
-        	    //System.out.println(buttonId);
+        	    ////System.out.println(elevatorId);
+        	    ////System.out.println(buttonId);
         	    //b.getStyleClass().removeAll("elevatorbutton, focus");
           	    //b.getStyleClass().add("buttonlit");
         	}else{
         		//down clicked
-        		//System.out.println(elevatorId);
-        		//System.out.println(buttonId);
+        		////System.out.println(elevatorId);
+        		////System.out.println(buttonId);
         		 //b.getStyleClass().removeAll("elevatorbutton, focus");
            	    //b.getStyleClass().add("buttonlit");
         	}
@@ -192,8 +192,8 @@ public class Main extends Application {
     public void update(Integer elevator, Integer request) {
     	if(this.scheduler!=null) {
     		ElevatorThread [] elevators = this.scheduler.getElevators();
-	    	System.out.println("update is called "+ elevator);
-	    	System.out.println("update is called "+ request);
+	    	//System.out.println("update is called "+ elevator);
+	    	//System.out.println("update is called "+ request);
 	    	ArrayList<Integer> requestList = elevators[elevator].getDestinationList();
 	    	requestList.add(request);
 	    	elevators[elevator].setDestinationList(requestList);
@@ -214,17 +214,17 @@ public class Main extends Application {
 			input.paintProperty().bind(Bindings.createObjectBinding(() -> Color.BLACK.interpolate(Color.WHITE, brightness.get()), brightness));
 	    	 
 	    	//Set<Node> set = eleanchorpane.lookupAll(selector)
-			System.out.println("Inside update" +ele);
-			System.out.println("Inside update" +t);
-			System.out.println("Inside update" +b);
+			//System.out.println("Inside update" +ele);
+			//System.out.println("Inside update" +t);
+			//System.out.println("Inside update" +b);
 			
 	    	Task elevatormove = new Task()
 	    	    {
 	    		@Override
 	    		protected Integer call() throws Exception{
-	    			System.out.println("Inside call" +ele);
-	    			System.out.println("Inside call" +b);
-	    			System.out.println("Inside call" +t);
+	    			//System.out.println("Inside call" +ele);
+	    			//System.out.println("Inside call" +b);
+	    			//System.out.println("Inside call" +t);
 	    			travel(ele,b);
 	    			return 1;
    
@@ -237,7 +237,7 @@ public class Main extends Application {
 	    	    	 
 	    	    	 public void travel(Group elevatorunit, Button b)
 	 	    	    {
-	    	    		 System.out.println("Inside travel");
+	    	    		 //System.out.println("Inside travel");
 	    	    		Rectangle elevrec = (Rectangle)(elevatorunit.getChildren().get(0));
 	    	    		Rectangle elevrec1 = (Rectangle)(elevatorunit.getChildren().get(1));
 	    	    		Rectangle elevrec2= (Rectangle)(elevatorunit.getChildren().get(2));
@@ -249,7 +249,7 @@ public class Main extends Application {
 	 	    	    		double durationtime1 = Math.abs(cur_elelocation_y-Math.ceil((double)request)*constant)*10;
 		 	    	    	double durationtime2 = Math.abs(Math.ceil((double)request)*constant-cur_elelocation_y)*10;
 	 	    	    		Timeline moveing = new Timeline();
-	 	    	    		System.out.println(elevrec.yProperty()+ "---- , ----"+ request * constant);
+	 	    	    		//System.out.println(elevrec.yProperty()+ "---- , ----"+ request * constant);
 	 	    	    		
 	 	    	    		if(cur_elelocation_y < (Math.ceil((double)request)))
 		 	    	    	{
@@ -291,11 +291,11 @@ public class Main extends Application {
 			 	    	    		Main.list.get(0).getScheduler().getElevators()[elevator].setDirection(-1);		 	    	    	    	
 		 	    	    	    }
 //		 	    	    		Main.list.get(0).getScheduler().getElevators()[elevator].setDirection(request);
-		 	    	    	    System.out.println("durationtime1 "+durationtime1 + "   cur_elelocation_y "+ cur_elelocation_y);
+		 	    	    	    //System.out.println("durationtime1 "+durationtime1 + "   cur_elelocation_y "+ cur_elelocation_y);
 	 	    	    			ParallelTransition parallel = new ParallelTransition(sequence,litbutton);
 	 	    	    			parallel.play();
 		 	    	     
-	 	    	    			System.out.println("durationtime1 "+durationtime1 + "   cur_elelocation_y "+ cur_elelocation_y);
+	 	    	    			//System.out.println("durationtime1 "+durationtime1 + "   cur_elelocation_y "+ cur_elelocation_y);
 		 	    	        }
 	 	    	    		
 		 	    	    	else
@@ -340,13 +340,13 @@ public class Main extends Application {
 		 	    	    	    }
 		 	    	    	       	    	
 		 	    	    	    
-	 	    	    			System.out.println("durationtime1 "+durationtime1 + "   cur_elelocation_y "+ cur_elelocation_y);
+	 	    	    			//System.out.println("durationtime1 "+durationtime1 + "   cur_elelocation_y "+ cur_elelocation_y);
 	 	    	    			ParallelTransition parallel = new ParallelTransition(sequence,litbutton);
 	 	    	    			parallel.play();
 		 	    	    	    //b.getStyleClass().removeAll("elevatorbutton, focus");
 		 	            	    //b.getStyleClass().add("buttonoff");
 		 	            	    
-	 	    	    			System.out.println("durationtime2 "+durationtime2 + "   cur_elelocation_y "+ cur_elelocation_y);
+	 	    	    			//System.out.println("durationtime2 "+durationtime2 + "   cur_elelocation_y "+ cur_elelocation_y);
 		 	    	    	}
 	 	    	    	
 	 	    	    		//b.getStyleClass().removeAll("elevatorbutton, focus");
@@ -354,8 +354,8 @@ public class Main extends Application {
 	 	    	    	}
 	 	    	    	Main.list.get(0).getScheduler().getElevators()[elevator].setDirection(0);
 	 	    	    	Main.list.get(0).getScheduler().getElevators()[elevator].setLocation(request);
-	 	    	    	System.out.println("Location of elevator "+elevator +" is "+Main.list.get(0).getScheduler().getElevators()[elevator].getLocation());
-	 	    	    	System.out.println("Direction of elevator "+elevator +" is "+Main.list.get(0).getScheduler().getElevators()[elevator].getDirection());
+	 	    	    	//System.out.println("Location of elevator "+elevator +" is "+Main.list.get(0).getScheduler().getElevators()[elevator].getLocation());
+	 	    	    	//System.out.println("Direction of elevator "+elevator +" is "+Main.list.get(0).getScheduler().getElevators()[elevator].getDirection());
 
 	 	    	    }
 	    	    	
@@ -371,9 +371,9 @@ public class Main extends Application {
 	    	//task.travel
 	    	//call task
 	    }
-//    	System.out.println(this);
+//    	//System.out.println(this);
 
-//    	System.out.println(this.scheduler);
+//    	//System.out.println(this.scheduler);
     }
     
    
@@ -407,7 +407,7 @@ public class Main extends Application {
     public void update(Integer request, String direction) {
     	if(this.scheduler!=null) {
     		int elevatorTobeCalled = this.scheduler.schedulerAlgorithm(this.scheduler.algorithmSetting, request);
-    		System.out.println("elevatorId : "+elevatorTobeCalled);
+    		//System.out.println("elevatorId : "+elevatorTobeCalled);
     		Node eleanchorpane = ((BorderPane) this.primaryStage.getScene().getRoot()).getCenter();
 	    	Group ele = (Group) eleanchorpane.lookup("#e"+elevatorTobeCalled);
 	    	Node floorcontrolpane = ((BorderPane) this.primaryStage.getScene().getRoot()).getLeft();
@@ -420,9 +420,9 @@ public class Main extends Application {
 	    		b = (Button) v.lookup("#"+(2*request-1));
 	    	}
 	    	//Set<Node> set = eleanchorpane.lookupAll(selector)
-			System.out.println("Inside update" +ele);
-			System.out.println("Inside update" +v);
-			System.out.println("Inside update" +b);
+			//System.out.println("Inside update" +ele);
+			//System.out.println("Inside update" +v);
+			//System.out.println("Inside update" +b);
 			
 			 Blend blendEffect = new Blend(BlendMode.DIFFERENCE);
 			 ColorInput input = new ColorInput();
@@ -438,9 +438,9 @@ public class Main extends Application {
 	    	    {
 	    		@Override
 	    		protected Integer call() throws Exception{
-	    			System.out.println("Inside call" +ele);
-	    			System.out.println("Inside call" +b);
-	    			System.out.println("Inside call" +v);
+	    			//System.out.println("Inside call" +ele);
+	    			//System.out.println("Inside call" +b);
+	    			//System.out.println("Inside call" +v);
 	    			travel(ele,b);
 	    			return 1;
    
@@ -453,7 +453,7 @@ public class Main extends Application {
 	    	    	 
 	    	    	 public void travel(Group elevatorunit, Button b)
 	 	    	    {
-	    	    		 System.out.println("Inside travel");
+	    	    		 //System.out.println("Inside travel");
 	    	    		Rectangle elevrec = (Rectangle)(elevatorunit.getChildren().get(0));
 	    	    		Rectangle elevrec1 = (Rectangle)(elevatorunit.getChildren().get(1));
 	    	    		Rectangle elevrec2= (Rectangle)(elevatorunit.getChildren().get(2));
@@ -464,7 +464,7 @@ public class Main extends Application {
 	 	    	    		double durationtime1 = Math.abs(cur_elelocation_y-Math.ceil((double)request)*constant)*10;
 		 	    	    	double durationtime2 = Math.abs(Math.ceil((double)request)*constant-cur_elelocation_y)*10;
 	 	    	    		//Timeline moveing = new Timeline();
-	 	    	    		System.out.println(elevrec.yProperty()+ "---- , ----"+ request * constant);
+	 	    	    		//System.out.println(elevrec.yProperty()+ "---- , ----"+ request * constant);
 	 	    	    		
 	 	    	    		if(cur_elelocation_y < (Math.ceil((double)request)))
 		 	    	    	{	
@@ -509,11 +509,11 @@ public class Main extends Application {
 		 	    	    	    }
 		 	    	    	       	    	
 		 	    	    	    
-	 	    	    			System.out.println("durationtime1 "+durationtime1 + "   cur_elelocation_y "+ cur_elelocation_y);
+	 	    	    			//System.out.println("durationtime1 "+durationtime1 + "   cur_elelocation_y "+ cur_elelocation_y);
 	 	    	    			ParallelTransition parallel = new ParallelTransition(sequence,litbutton);
 	 	    	    			parallel.play();
 	 	    	    			
-	 	    	    			System.out.println((int)durationtime1+ "," +(int)durationtime2);
+	 	    	    			//System.out.println((int)durationtime1+ "," +(int)durationtime2);
 		 	    	        }
 		 	    	    	else
 		 	    	    	{	
@@ -561,8 +561,8 @@ public class Main extends Application {
 		 	    	    	    //b.getStyleClass().removeAll("elevatorbutton, focus");
 		 	            	    //b.getStyleClass().add("buttonoff");
 		 	            	    
-	 	    	    			System.out.println("durationtime2 "+durationtime2 + "   cur_elelocation_y "+ cur_elelocation_y);
-	 	    	    			System.out.println((int)durationtime1+ "," +(int)durationtime2);
+	 	    	    			//System.out.println("durationtime2 "+durationtime2 + "   cur_elelocation_y "+ cur_elelocation_y);
+	 	    	    			//System.out.println((int)durationtime1+ "," +(int)durationtime2);
 		 	    	    	}
 	 	    	    	
 	 	    	    		//b.getStyleClass().removeAll("elevatorbutton, focus");
@@ -570,8 +570,8 @@ public class Main extends Application {
 	 	    	    	}
 	 	    	    	Main.list.get(0).getScheduler().getElevators()[elevatorTobeCalled].setDirection(0);
 	 	    	    	Main.list.get(0).getScheduler().getElevators()[elevatorTobeCalled].setLocation(request);
-	 	    	    	System.out.println("Location of elevator "+elevatorTobeCalled +" is "+Main.list.get(0).getScheduler().getElevators()[elevatorTobeCalled].getLocation());
-	 	    	    	System.out.println("Direction of elevator "+elevatorTobeCalled +" is "+Main.list.get(0).getScheduler().getElevators()[elevatorTobeCalled].getDirection());
+	 	    	    	//System.out.println("Location of elevator "+elevatorTobeCalled +" is "+Main.list.get(0).getScheduler().getElevators()[elevatorTobeCalled].getLocation());
+	 	    	    	//System.out.println("Direction of elevator "+elevatorTobeCalled +" is "+Main.list.get(0).getScheduler().getElevators()[elevatorTobeCalled].getDirection());
  	    	    	
 	 	    	    	
 	 	    	    }
@@ -584,11 +584,11 @@ public class Main extends Application {
     		// set to destinationList
     		// move the elevator
     		// 
-    		System.out.println("update is called "+ request);
+    		//System.out.println("update is called "+ request);
     	}
-    	System.out.println(this);
+    	//System.out.println(this);
 
-    	System.out.println(this.scheduler);
+    	//System.out.println(this.scheduler);
 
     }
     @Override
@@ -736,7 +736,7 @@ public class Main extends Application {
         	elevatorunitbases[i].setLayoutY(0);
         	elevatorunitbases[i].getStyleClass().add("ElevatorUnit");     	
         	//ElevatorUnitPane.getChildren().add(elevatorunitbases[i]);
-        	//System.out.println(""+ elevatorunitbases[i].getWidth());     	
+        	////System.out.println(""+ elevatorunitbases[i].getWidth());     	
         }
         
         // These are the elevator left doors
@@ -936,14 +936,14 @@ primaryStage.setHeight(primaryScreenBounds.getHeight());*/
     	String s = b.getText();
     	String id = b.getId();
     	int idint = Integer.parseInt(id);
-    	System.out.println(e);
+    	//System.out.println(e);
     	if("Up".equalsIgnoreCase(s)){
     		//up clicked
-    	    System.out.println(idint);
+    	    //System.out.println(idint);
     	    
     	}else{
     		//down clicked
-    		System.out.println(idint);
+    		//System.out.println(idint);
     	}
     	
     	//floorbuttons[1].getStyleClass().add("buttonlit");
