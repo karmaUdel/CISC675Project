@@ -3,23 +3,25 @@
  */
 package simulator;
 
+import gui.Gui;
+
 /**
  * @author Aditya
  *
  */
 public class Initiator {
-	private Simulator simulate ;
+	private Gui gui ;
 	private static String errorMessage = "Please Enter Valid value for Floors and elevators\n";
 	/**
 	 * Constructor
 	 */
 	public Initiator() {
 		super();
-		simulate = new Simulator(); // running in default mode	
+		gui = new Gui(); // running in default mode	
 	}
 	public Initiator(int numberOfFloors,int numberOfElevators) {
 		super();
-		simulate = new Simulator(numberOfFloors, numberOfElevators);		
+		gui = new Gui(numberOfFloors, numberOfElevators);		
 	}
 
 	/**
@@ -47,10 +49,12 @@ public class Initiator {
 		   System.err.println("Runnning default mode Number of Floors : 10, number of Elevators: 5");
 		   init =  new Initiator(); // initiate for default mode
        }
+       
        init.initiate(); // run the simulator
 	}
 	public void initiate() {
-		this.simulate.schedule();
+		String args[] = null;
+		this.gui.initiate(args, this.gui);
 	}
 
 }

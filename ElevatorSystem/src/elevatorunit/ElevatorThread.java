@@ -1,7 +1,7 @@
 /**
  * 
  */
-package simulator;
+package elevatorunit;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -56,7 +56,7 @@ public class ElevatorThread extends Thread {
 	}
 	
 	/**
-	 * 
+	 * Default Constructor
 	 */
 	public ElevatorThread() {
 		super();
@@ -66,98 +66,12 @@ public class ElevatorThread extends Thread {
 		this.elevatorId = count++;
 		this.destinationList = new ArrayList<Integer>();		
 	}
-
 	/**
-	 * @param arg0
+	 * Specialized constructor
+	 * @param location
+	 * @param destination
+	 * @param direction
 	 */
-	public ElevatorThread(Runnable arg0) {
-		super(arg0);
-		this.location = 0;
-		this.destination = -1;
-		this.direction = 0;
-		this.elevatorId = count++;
-		this.destinationList = new ArrayList<Integer>();		
-	}
-
-	/**
-	 * @param arg0
-	 */
-	public ElevatorThread(String arg0) {
-		super(arg0);
-		this.location = 0;
-		this.destination = -1;
-		this.direction = 0;
-		this.elevatorId = count++;
-		this.destinationList = new ArrayList<Integer>();		
-	}
-
-	/**
-	 * @param arg0
-	 * @param arg1
-	 */
-	public ElevatorThread(ThreadGroup arg0, Runnable arg1) {
-		super(arg0, arg1);
-		this.location = 0;
-		this.destination = -1;
-		this.direction = 0;
-		this.elevatorId = count++;
-		this.destinationList = new ArrayList<Integer>();		
-	}
-
-	/**
-	 * @param arg0
-	 * @param arg1
-	 */
-	public ElevatorThread(ThreadGroup arg0, String arg1) {
-		super(arg0, arg1);
-		this.location = 0;
-		this.destination = -1;
-		this.direction = 0;
-		this.elevatorId = count++;
-		this.destinationList = new ArrayList<Integer>();		
-	}
-
-	/**
-	 * @param arg0
-	 * @param arg1
-	 */
-	public ElevatorThread(Runnable arg0, String arg1) {
-		super(arg0, arg1);
-		this.location = 0;
-		this.destination = -1;
-		this.direction = 0;
-		this.elevatorId = count++;
-		this.destinationList = new ArrayList<Integer>();		
-	}
-
-	/**
-	 * @param arg0
-	 * @param arg1
-	 * @param arg2
-	 */
-	public ElevatorThread(ThreadGroup arg0, Runnable arg1, String arg2) {
-		super(arg0, arg1, arg2);
-		this.location = 0;
-		this.destination = -1;
-		this.direction = 0;
-		this.elevatorId = count++;
-		this.destinationList = new ArrayList<Integer>();		
-	}
-
-	/**
-	 * @param arg0
-	 * @param arg1
-	 * @param arg2
-	 * @param arg3
-	 */
-	public ElevatorThread(ThreadGroup arg0, Runnable arg1, String arg2, long arg3) {
-		super(arg0, arg1, arg2, arg3);
-		this.location = 0;
-		this.destination = -1;
-		this.direction = 0;
-		this.elevatorId = count++;
-		this.destinationList = new ArrayList<Integer>();		
-	}
 	public ElevatorThread(int location,int destination,int direction) {
 		super();
 		this.location = location;

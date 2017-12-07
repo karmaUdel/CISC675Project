@@ -1,40 +1,53 @@
 /**
  * 
  */
-package simulator;
+package scheduler;
+
+import elevatorunit.ElevatorThread;
 
 /**
  * @author Aditya
  *
  */
-public class Schedule {
+public class SchedulerImpl implements IScheduler{
 	ElevatorThread[] elevators;
+	public int setting = 0;
 	public static final int FALSE = 99999;
 	/**
 	 * Generic Constructor
 	 * Idea is , never use this constructor
 	 */
-	public Schedule() {
+	public SchedulerImpl() {
 		super();
 		elevators = new ElevatorThread[5];
 	}
+	/**
+	 * Default setting on scheduling side
+	 * @param elevators
+	 */
 	public void setElevators(ElevatorThread[] elevators) {
 		this.elevators = elevators;
+	}
+	@Override
+	public void setSettings(ElevatorThread[] elevators, int setting) {
+		this.elevators = elevators;
+		this.setting = setting;
 	}
 	/**
 	 * Specialized Constructor
 	 * @param schedulerObject
 	 */
-	public Schedule(Scheduler schedulerObject) {
+	/*public Schedule(Scheduler schedulerObject) {
 		super();
 		this.elevators = schedulerObject.getElevators(); 
-	}
+	}*/
 	
 	/**
 	 * @param setting
 	 * @param request
 	 */
-	public int scheduler(int setting,int request) {
+	@Override
+	public int scheduler(int request) {
 		int elevatorId =0;
 		switch(setting) {
 		case 1:
@@ -89,7 +102,7 @@ public class Schedule {
 		while(i<this.elevators.length) {
 			if(!this.elevators[i].isMoving()) { // if not moving
 				val = Math.abs(getClosest(false, this.elevators[i].getDirection(),request, i));
-				System.out.println("Inside schedule2 :: val :"+val +" closest: "+closest+"\n");
+				//System.out.println("Inside schedule2 :: val :"+val +" closest: "+closest+"\n");
 				if(val!=FALSE) {
 					if(val<closest) {
 						closest = val;
