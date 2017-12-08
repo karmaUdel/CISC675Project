@@ -12,9 +12,11 @@ import java.util.Collections;
  */
 public class ElevatorThread extends Thread {
 	
+	private IMotor motor;
+	private IDoor door;
     private static int count = 0; //  increments on every object creation
     private int elevatorId; // value assigned when every time new object is created
-
+    private ILights lights;
 	private int location; // default value is 0
 	private int destination; // default value is -1
 	private int direction; // default value is 0, 1: Going up, 0: Stationary, -1: Going Down
@@ -53,6 +55,11 @@ public class ElevatorThread extends Thread {
 
 	public void setDirection(int direction) {
 		this.direction = direction;
+		if(this.direction == 0) {
+			move("stop");
+		}else {
+			move("start");
+		}
 	}
 	
 	/**
@@ -65,6 +72,9 @@ public class ElevatorThread extends Thread {
 		this.direction = 0;
 		this.elevatorId = count++;
 		this.destinationList = new ArrayList<Integer>();		
+		this.motor = new MotorImpl();
+		this.lights = new LightImpl();
+		this.door = new DoorImpl();
 	}
 	/**
 	 * Specialized constructor
@@ -79,6 +89,9 @@ public class ElevatorThread extends Thread {
 		this.direction = direction;
 		this.elevatorId = count++;
 		this.destinationList = new ArrayList<Integer>();
+		this.motor = new MotorImpl();
+		this.lights = new LightImpl();
+		this.door = new DoorImpl();
 	}
 	public boolean isMoving() {
 		if(this.getDirection()==0) {
@@ -87,11 +100,62 @@ public class ElevatorThread extends Thread {
 			return true;
 		}
 	}
+	/**
+	 * Sort the destinatin List
+	 * @param list
+	 * @return
+	 */
 	public ArrayList<Integer> sort(ArrayList<Integer> list) {
 		Collections.sort(list);// sort ascending 0,1,2,3....
 		if(this.getDirection()== -1){
 			Collections.reverse(list); // if direction is -1 then reverse the order
 		}
 		return list;
+	}
+	/**
+	 * Turn off or Turn on the motor for an elevator
+	 * @param perform
+	 * @return
+	 */
+	public boolean move(String perform) {
+		if ("stop".equalsIgnoreCase(perform)){
+			return this.motor.stopMotor();
+		}{
+			return this.motor.startMotor();
+		}
+	}
+	/**
+	 * Perform change in lights based on operation
+	 * @param perform
+	 * @param button
+	 * @return
+	 */
+	public boolean changeLights(String perform, int button) {
+		if ("off".equalsIgnoreCase(perform)){
+			return this.lights.turnOff(button);
+		}{
+			return this.lights.turnOn(button);
+		}
+	}
+	/**
+	 * Look if door open or close ?
+	 * @return
+	 */
+	public boolean checkDoors() {
+		if(this.door.open()) {
+			return false;
+		}else {
+			return true;
+		}
+	}
+	/**
+	 * Close and Open door
+	 */
+	public void operateDoors() {
+		if(this.door.open()) {
+			this.door.close();
+		}else {
+			this.door.open();
+		}
 	}
 }

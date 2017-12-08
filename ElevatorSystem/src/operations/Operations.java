@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import elevatorunit.ElevatorThread;
 import scheduler.IScheduler;
 import scheduler.SchedulerImpl;
+import utility.ElevatorUtility;
 
 /**
  * @author Aditya
@@ -29,14 +30,16 @@ public class Operations implements IOperation{
 	
 	IScheduler scheduler ;// Scheduler object
 	ElevatorThread threads [];// Elevator Threads
-	// TODO: Set of Constant Values
+	ElevatorUtility util ;// TODO: Set of Constant Values
 	public Operations() {
 		super();
+		util = new ElevatorUtility();
 	}
 	public Operations(int numberOfFloors, int numberofElevators, int schedulingAlgo ) {
 		super();
 		// assigning appropriate Values
 		initiate(numberOfFloors, numberofElevators, schedulingAlgo);
+		util = new ElevatorUtility();
 	}
 	@Override
 	public ArrayList<Integer> update(int floor,int elevator, int button, String operation) {
@@ -56,15 +59,10 @@ public class Operations implements IOperation{
 		// get ElevatorId
 		// elevator related information
 		this.threads[elevator].setDestination(floor);
-		int direction = floor - this.threads[elevator].getLocation();
-		if(direction > 1) {
-			direction = 1;
-		}else if(direction <0){
-			direction = -1;
-		}else {
-			direction = 0;
-		}
+		int direction = util.knowDirection(floor, this.threads[elevator].getLocation());
 		this.threads[elevator].setDirection(direction); // as of now sending everyone up
+		//start motor
+		this.threads[elevator].changeLights("on",floor); // turn lights on
 		return updatedValues;
 	}
 	
@@ -79,12 +77,24 @@ public class Operations implements IOperation{
 		int elevator = values.get(0);
 		int location = values.get(1);
 		this.threads[elevator].setLocation(location);
+		this.threads[elevator].setDirection(0); // elevator stopped // turn off motor
+		clearSignals(elevator);
 		return null;
 	}
 	@Override
-	public boolean clearSignals() {
+	public boolean clearSignals(int elevatorId) {
 		// TODO stop elevator abruptly
-		return false;
+		return clearIndicators(elevatorId);
+		//return false;
+	}
+	/**
+	 * this turns off Indicators for particular Elevator
+	 * @param elevator
+	 * @return
+	 */
+	public boolean clearIndicators(int elevator) {
+		this.threads[elevator].changeLights("off",this.threads[elevator].getLocation());
+		return true;
 	}
 	
 	/**

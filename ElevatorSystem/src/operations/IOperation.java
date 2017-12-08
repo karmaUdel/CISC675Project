@@ -7,6 +7,6 @@ public interface IOperation {
 	//ArrayList<Integer> update();
 	boolean storeMaps();
 	Integer storeValues(ArrayList<Integer> values);
-	boolean clearSignals();
+	boolean clearSignals(int elevatorId);
 	ArrayList<Integer> update(int floor, int elevator, int button, String operation);
 }

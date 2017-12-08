@@ -362,7 +362,7 @@ public class Gui extends Application{
     
         // Create scene and load css file
         Scene scene = new Scene(BottomPane, STAGEWIDTH, STAGEHEIGHT);
-        scene.getStylesheets().add("gui_learning/application.css");
+        scene.getStylesheets().add("gui/application.css");
         primaryStage.setScene(scene);
     	Gui.list.get(0).primaryStage = primaryStage;
     	Gui.list.get(0).primaryStage.show();
