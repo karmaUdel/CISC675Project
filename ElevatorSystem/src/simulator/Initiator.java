@@ -3,6 +3,8 @@
  */
 package simulator;
 
+import java.util.Scanner;
+
 import gui.Gui;
 
 /**
@@ -17,11 +19,13 @@ public class Initiator {
 	 */
 	public Initiator() {
 		super();
-		gui = new Gui(); // running in default mode	
+		// ask for algorithm setting 
+		gui = new Gui(10,5,getAlgorithmSetting()); // running in default mode	
 	}
 	public Initiator(int numberOfFloors,int numberOfElevators) {
 		super();
-		gui = new Gui(numberOfFloors, numberOfElevators);		
+		// ask for algorithm setting 
+		gui = new Gui(numberOfFloors, numberOfElevators,getAlgorithmSetting());		
 	}
 
 	/**
@@ -56,5 +60,23 @@ public class Initiator {
 		String args[] = null;
 		this.gui.initiate(args, this.gui);
 	}
-
+	public int getAlgorithmSetting() {
+		System.out.println("Enter Scheduling Algorithm \n");
+		System.out.println("Which Scheduling you want to use");
+		System.out.println("1. Schedule only moving elevators\n2. Schedule only non-moving elevator");
+		System.out.println("3. Schedule only closest elevators moving towards requested floor\n4. Default Schedule for an elevator System\n");		
+		int x =999;
+		Scanner in =null;
+		try {
+			in = new Scanner(System.in);
+			x = in.nextInt();
+		}catch (Exception e) {
+			// Default schedule
+			System.err.println("Invalid input\n Choosing default scheduler");
+		}
+		finally {
+			in.close();
+		}
+		return x;
+	}
 }

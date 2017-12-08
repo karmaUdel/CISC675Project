@@ -53,12 +53,14 @@ public class Gui extends Application{
 	private static final double STAGEHEIGHT = 900;
 	private Stage primaryStage;
 	private final TaskHandler handler;
+	private final int algorithmSetting; 
 	/**
 	 * Run {@link Application} in default settings
 	 */
 	public Gui () {
 		super();
-		operation = new Operations(10,5,4); //  use specialized Constructor
+		this.algorithmSetting = 999;
+		operation = new Operations(10,5,999); //  use specialized Constructor
 		this.elevatornum = 5;
 		this.floornum = 10;
 		list.add(this);
@@ -71,7 +73,8 @@ public class Gui extends Application{
 	 */
 	public Gui (int numberOfFloors,int numberOfElevators) {
 		super();
-		operation = new Operations(numberOfFloors,numberOfElevators,4); //  use specialized Constructor
+		this.algorithmSetting = 999; // Default
+		operation = new Operations(numberOfFloors,numberOfElevators,this.algorithmSetting); //  use specialized Constructor
 		this.elevatornum = numberOfElevators;
 		this.floornum = numberOfFloors;
 		list.add(this);
@@ -85,6 +88,7 @@ public class Gui extends Application{
 	 */
 	public Gui (int numberOfFloors,int numberOfElevators, int schedulingAlgo) {
 		super();
+		this.algorithmSetting = schedulingAlgo;
 		operation = new Operations(numberOfFloors,numberOfElevators,schedulingAlgo); //  use specialized Constructor
 		this.elevatornum = numberOfElevators;
 		this.floornum = numberOfFloors;
