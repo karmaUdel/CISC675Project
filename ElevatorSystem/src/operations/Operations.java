@@ -59,7 +59,7 @@ public class Operations implements IOperation{
 		// get ElevatorId
 		// elevator related information
 		this.threads[elevator].getDestinationList().add(floor);
-//		this.threads[elevator].setDestinationList();
+		//this.threads[elevator].setDestinationList();
 		int direction = util.knowDirection(floor, this.threads[elevator].getLocation());
 		this.threads[elevator].setDirection(direction); // as of now sending everyone up
 		//start motor

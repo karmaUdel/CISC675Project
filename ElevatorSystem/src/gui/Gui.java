@@ -5,7 +5,10 @@ package gui;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
+
 
 import javafx.application.Application;
 import javafx.event.Event;
@@ -31,6 +34,7 @@ import operations.IOperation;
 import operations.Operations;
 import utility.AnimationTask;
 import utility.TaskHandler;
+import utility.Work;
 
 
 public class Gui extends Application{
@@ -141,13 +145,49 @@ public class Gui extends Application{
 	/**
 	 * TODO : copy stuff from working UI
 	 */
+	/**
+	 * update is method called on event happens on GUI
+	 * @param floorId
+	 * @param elevatorId
+	 * @param buttonId
+	 * @param operationId
+	 */
+	List<AnimationTask> list1 = Collections.synchronizedList(new ArrayList<AnimationTask>());
+	boolean hasFutureWork = false;
 	public void update(int floorId, int elevatorId, int buttonId, String operationId) {
-		AnimationTask task = this.handler.getInstance(operationId+"_"+elevatorId);
 		ArrayList<Integer> values = operation.update(floorId,elevatorId,buttonId,operationId); //--> this will send me request, elevatorUnit and constant
 		//values = playStub(values);
+		AnimationTask task = lookupTask("_"+values.get(0));
+		if(list1.isEmpty() || task == null) {
+			task = this.handler.getInstance("_"+values.get(0)); // check which elevator we want to operate
+			list1.add(task);
+		}
 		playAnimation(task,values); // play the animation
 		operation.storeValues(values); // set some values
 	}
+	public AnimationTask lookupTask(String name) {
+		java.util.Iterator<AnimationTask> i = list1.iterator();
+		AnimationTask task = null;
+		boolean found = false;
+		while(i.hasNext()) {
+			task = i.next();
+			if(name.equalsIgnoreCase(task.getName())) {
+				task.setHasFutureWork(true);
+				found = true;
+				break;
+			}
+		}
+		if(!found) {
+			task = new AnimationTask(name);
+			list1.add(task);
+		}
+		return task;
+	}
+	/**
+	 * Random Mode
+	 * @param values
+	 * @return
+	 */
 	public ArrayList<Integer> playStub(ArrayList<Integer> values) {
 		if(values != null) {
 			values = new ArrayList<Integer>();
@@ -157,6 +197,11 @@ public class Gui extends Application{
 		values.add(rand.nextInt(10));
 		return values;
 	}
+	/**
+	 * Play Animation
+	 * @param task
+	 * @param values
+	 */
 	public void playAnimation(AnimationTask task,ArrayList<Integer> values) {
 		//Get All of the required Values
 		int elevator = values.get(0);
@@ -171,12 +216,40 @@ public class Gui extends Application{
 	    Button b = (Button) t.lookup("#"+elevator+"_"+request);
 	    
 	    // pass to Animation Player
-		task.setValuesForAnimation(elevatorunit, b, request, constant);
+	    Work w = new Work(elevatorunit, b, request, constant);
+		task.setValuesForAnimation(w);
+		
 		//Play the Animation
-		task.run();
+		if(!task.hasFutureWork()) {
+			//System.out.println("About to run task "+ task.getName());
+			task.run();			
+		}
+		//if(hasFutureWork) {
+			//add new destination List
+			
+		//}
+		//hasFutureWork = false;
 		this.handler.terminateTask(task);
+		removeTasksfromList();//list1.remove(task);
 	}
-	
+	synchronized public void removeTasksfromList() {
+		java.util.Iterator<AnimationTask> i = list1.iterator();
+		AnimationTask task = null;
+		ArrayList<AnimationTask> removeTaskList = new ArrayList<AnimationTask>();
+		while(i.hasNext()) {
+			task = i.next();
+			if(!task.hasFutureWork()) {
+				//list1.remove(task);	
+				removeTaskList.add(task);
+			}
+		}
+		int z =0;
+		while(z<removeTaskList.size()) {
+			list1.remove(removeTaskList.get(z));
+			z++;
+		}
+		removeTaskList = null;
+	}
 	/**
 	 * All Gui related codes goes below
 	 */
