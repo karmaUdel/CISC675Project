@@ -58,7 +58,8 @@ public class Operations implements IOperation{
 		}
 		// get ElevatorId
 		// elevator related information
-		this.threads[elevator].setDestination(floor);
+		this.threads[elevator].getDestinationList().add(floor);
+//		this.threads[elevator].setDestinationList();
 		int direction = util.knowDirection(floor, this.threads[elevator].getLocation());
 		this.threads[elevator].setDirection(direction); // as of now sending everyone up
 		//start motor
@@ -107,7 +108,7 @@ public class Operations implements IOperation{
 	public void initiate( int numberOfFloors, int numberOfElevators, int schedulingAlgo) {
 		this.threads = new ElevatorThread [numberOfElevators];
 		for(int i = 0;i<numberOfElevators;i++) {
-			this.threads[i] = new ElevatorThread(0, -1, 0);
+			this.threads[i] = new ElevatorThread(0, -1, 0, numberOfFloors);
 		}
 		this.scheduler = new SchedulerImpl();
 		this.scheduler.setSettings(this.threads,schedulingAlgo);

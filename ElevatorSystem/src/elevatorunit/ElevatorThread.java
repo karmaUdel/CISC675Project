@@ -73,7 +73,7 @@ public class ElevatorThread extends Thread {
 		this.elevatorId = count++;
 		this.destinationList = new ArrayList<Integer>();		
 		this.motor = new MotorImpl();
-		this.lights = new LightImpl();
+		this.lights = new LightImpl(10);
 		this.door = new DoorImpl();
 	}
 	/**
@@ -82,7 +82,7 @@ public class ElevatorThread extends Thread {
 	 * @param destination
 	 * @param direction
 	 */
-	public ElevatorThread(int location,int destination,int direction) {
+	public ElevatorThread(int location,int destination,int direction,int floors) {
 		super();
 		this.location = location;
 		this.destination = destination;
@@ -90,7 +90,7 @@ public class ElevatorThread extends Thread {
 		this.elevatorId = count++;
 		this.destinationList = new ArrayList<Integer>();
 		this.motor = new MotorImpl();
-		this.lights = new LightImpl();
+		this.lights = new LightImpl(floors);
 		this.door = new DoorImpl();
 	}
 	public boolean isMoving() {
