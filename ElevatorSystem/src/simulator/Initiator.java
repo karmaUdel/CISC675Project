@@ -13,7 +13,7 @@ import gui.Gui;
  */
 public class Initiator {
 	private Gui gui ;
-	private static String errorMessage = "Please Enter Valid value for Floors and elevators\n";
+	private static final String errorMessage = "Please Enter Valid value for Floors and elevators\n";
 	/**
 	 * Constructor
 	 */
@@ -27,7 +27,12 @@ public class Initiator {
 		// ask for algorithm setting 
 		gui = new Gui(numberOfFloors, numberOfElevators,getAlgorithmSetting());		
 	}
-
+	public Gui getGui() {
+		return gui;
+	}
+	public void setGui(Gui gui) {
+		this.gui = gui;
+	}
 	/**
 	 * @param args
 	 */
@@ -60,7 +65,7 @@ public class Initiator {
 		String args[] = null;
 		this.gui.initiate(args, this.gui);
 	}
-	public int getAlgorithmSetting() {
+	private int getAlgorithmSetting() {
 		System.out.println("Enter Scheduling Algorithm \n");
 		System.out.println("Which Scheduling you want to use");
 		System.out.println("1. Schedule only moving elevators\n2. Schedule only non-moving elevator");

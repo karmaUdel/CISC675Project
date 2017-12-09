@@ -99,7 +99,19 @@ public class Gui extends Application{
 	public Gui getInstance() {
         return this;
     }
-	
+	public int getElevatornum() {
+		return elevatornum;
+	}
+	public void setElevatornum(int elevatornum) {
+		this.elevatornum = elevatornum;
+	}
+	public int getFloornum() {
+		return floornum;
+	}
+	public void setFloornum(int floornum) {
+		this.floornum = floornum;
+	}
+
 	@SuppressWarnings("rawtypes")
 	EventHandler floorbuttonhandler = new EventHandler() 
 	{
