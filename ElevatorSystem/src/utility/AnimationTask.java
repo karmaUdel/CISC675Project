@@ -79,7 +79,7 @@ public class AnimationTask extends Task<Integer> {
 			travel();
 			setRunning( false);
 			workList.remove(0);
-			System.out.println(workList.size());
+			//System.out.println(workList.size());
 			//this.notifyAll();
 		}
 		//this.runAndReset();

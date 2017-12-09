@@ -10,8 +10,8 @@ import elevatorunit.ElevatorThread;
  *
  */
 public class SchedulerImpl implements IScheduler{
-	ElevatorThread[] elevators;
-	public int setting = 0;
+	private ElevatorThread[] elevators;
+	private int setting = 0;
 	public static final int FALSE = 99999;
 	/**
 	 * Generic Constructor
@@ -27,6 +27,15 @@ public class SchedulerImpl implements IScheduler{
 	 */
 	public void setElevators(ElevatorThread[] elevators) {
 		this.elevators = elevators;
+	}
+	public int getSetting() {
+		return setting;
+	}
+	public void setSetting(int setting) {
+		this.setting = setting;
+	}
+	public ElevatorThread[] getElevators() {
+		return elevators;
 	}
 	@Override
 	public void setSettings(ElevatorThread[] elevators, int setting) {
@@ -177,11 +186,7 @@ public class SchedulerImpl implements IScheduler{
 				return FALSE; //going away from the requested floor
 			}
 		}else {
-			if(direction==0){ //if lift is not moving
-				return val;
-			}else { // this condition is never reached
-				return FALSE;
-			}
+				return val;			
 		}
 	}
 	/**
