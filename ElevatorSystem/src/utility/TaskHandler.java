@@ -1,28 +1,17 @@
 package utility;
 
 
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
-import java.util.concurrent.Executor;
-
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Worker;
-import javafx.concurrent.Worker.State;
-
 public class TaskHandler {
 	//List<AnimationTask> list ;
 	ObservableList<AnimationTask> list;
 	public TaskHandler() {
-		// TODO Auto-generated constructor stub
 		super();
 		list = FXCollections.observableArrayList();//new ArrayList<AnimationTask>();
 	}
 	/*public TaskHandler(Executor exec) {
-		// TODO Auto-generated constructor stub
 		super();
 		list = FXCollections.observableArrayList();//new ArrayList<AnimationTask>();
 	}*/
@@ -77,7 +66,6 @@ public class TaskHandler {
 	/*@Override
 	@Deprecated
 	public void execute(Runnable command) {
-		// TODO Auto-generated method stub
 		if (command instanceof Worker) {
             final Worker<?> task = (Worker<?>) command ;
             task.stateProperty().addListener(new ChangeListener<State>() {
