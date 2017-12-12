@@ -21,15 +21,12 @@ public class MotorTest {
 
 	@Test
 	public void testStartMotor() {
-		assertFalse(!motor.startMotor());
 		assertTrue(motor.startMotor());		
 	}
 
 	@Test
 	public void testStopMotor() {
 		assertFalse(motor.stopMotor());
-		assertTrue(!motor.stopMotor());
-		
 	}
 
 }

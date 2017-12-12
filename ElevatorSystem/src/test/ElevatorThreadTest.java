@@ -16,12 +16,14 @@ public class ElevatorThreadTest {
     static ElevatorThread ele;
     static ArrayList<Integer> destList;
 	static Random rand;
+	static int key;
     @BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		rand = new Random();
     	ele = new ElevatorThread(0, -1, 0, 10);
 		destList = new ArrayList<Integer>();
-		}
+		key = ele.getElevatorId();
+    }
 
 	@Before
 	public void setUp() throws Exception {
@@ -39,11 +41,15 @@ public class ElevatorThreadTest {
 			assertEquals(destList.get(i), temp.get(i));
 		}
 	}
-
+	@Test
+	public void testElevatorThread() {
+		ElevatorThread elev = new ElevatorThread();
+		assertEquals(0, elev.getLocation()); // Creates default object
+	}
 
 	@Test
 	public void testGetElevatorId() {
-		assertEquals(0, ele.getElevatorId()); // 0 will be assigned to object
+		assertEquals(key, ele.getElevatorId()); // 0 will be assigned to object
 	}
 
 	@Test

@@ -17,12 +17,12 @@ import utility.ElevatorUtility;
 
 /**
  * 
- * TODO : 1. Stores maps  -- > Holds object of Scheduler and ElevatorUnit[]
- * TODO : 2. Calls updates --> Updates the operations and maps
- * TODO : 3. Calls schedule --> Calls Scheduler to provide an elevatorUnit to be called
- * TODO : 4. Calls storeValues --> Called when GUI animation terminates and time to store endResult on termination 
- * TODO : 5. Calls addDestination --> adds if inside buttons of elevators are clicked 
- * TODO : 6. Calls clearSignals --> kills returns kill the thread signal back to GUI, acts as the stop the motor
+ * 1. Stores maps  -- > Holds object of Scheduler and ElevatorUnit[]
+ * 2. Calls updates --> Updates the operations and maps
+ * 3. Calls schedule --> Calls Scheduler to provide an elevatorUnit to be called
+ * 4. Calls storeValues --> Called when GUI animation terminates and time to store endResult on termination 
+ * 5. Calls addDestination --> adds if inside buttons of elevators are clicked 
+ * 6. Calls clearSignals --> kills returns kill the thread signal back to GUI, acts as the stop the motor
  * @author Aditya
  *
  */
@@ -30,7 +30,19 @@ public class OperationImpl implements IOperation{
 	
 	IScheduler scheduler ;// Scheduler object
 	ElevatorThread threads [];// Elevator Threads
-	ElevatorUtility util ;// TODO: Set of Constant Values
+	ElevatorUtility util ;//  Set of Constant Values
+	public IScheduler getScheduler() {
+		return scheduler;
+	}
+	public void setScheduler(IScheduler scheduler) {
+		this.scheduler = scheduler;
+	}
+	public ElevatorThread[] getThreads() {
+		return threads;
+	}
+	public void setThreads(ElevatorThread[] threads) {
+		this.threads = threads;
+	}
 	public OperationImpl() {
 		super();
 		util = new ElevatorUtility();
@@ -43,7 +55,7 @@ public class OperationImpl implements IOperation{
 	}
 	@Override
 	public ArrayList<Integer> update(int floor,int elevator, int button, String operation) {
-		// TODO update the destination and service an elevator
+		// update the destination and service an elevator
 		ArrayList<Integer> updatedValues = new ArrayList<Integer>(); // empty
 		// call schedule
 		if(floor != -1) {
@@ -67,6 +79,10 @@ public class OperationImpl implements IOperation{
 		return updatedValues;
 	}
 	
+	/***
+	 * Unimplemented, UI doesn't need to reflect any values back
+	 * This is kept for random mode of operation
+	 */
 	@Override
 	public boolean storeMaps() {
 		// TODO Reflect the changes
@@ -74,7 +90,7 @@ public class OperationImpl implements IOperation{
 	}
 	@Override
 	public Integer storeValues(ArrayList<Integer> values) {
-		// TODO this is called when elevator animation ends 
+		// this is called when elevator animation ends 
 		int elevator = values.get(0);
 		int location = values.get(1);
 		this.threads[elevator].setLocation(location);
@@ -84,7 +100,7 @@ public class OperationImpl implements IOperation{
 	}
 	@Override
 	public boolean clearSignals(int elevatorId) {
-		// TODO stop elevator abruptly
+		// stop elevator abruptly
 		return clearIndicators(elevatorId);
 		//return false;
 	}
@@ -94,13 +110,12 @@ public class OperationImpl implements IOperation{
 	 * @return
 	 */
 	public boolean clearIndicators(int elevator) {
-		this.threads[elevator].changeLights("off",this.threads[elevator].getLocation());
-		return true;
+		return this.threads[elevator].changeLights("off",this.threads[elevator].getLocation());		 
 	}
 	
 	/**
 	 * this falls inside constructor
-	 * TODO : It's job is to create elevator threads
+	 * It's job is to create elevator threads
 	 * And create Scheduler object
 	 * @param numberOfFloors
 	 * @param numberOfElevators

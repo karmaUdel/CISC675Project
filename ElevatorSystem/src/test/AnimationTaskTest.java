@@ -18,11 +18,13 @@ public class AnimationTaskTest {
 	static AnimationTask task;
 	static TaskHandler handler;
 	static Random rand;
+	static int key;
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		//task = new AnimationTask("Up_3");
 		handler = new TaskHandler();
 		task = handler.getInstance("Up_3");
+		key = task.getUniqueKey();
 	}
 
 	@Before
@@ -35,6 +37,20 @@ public class AnimationTaskTest {
 		assertFalse(task.hasFutureWork());
 	}
 
+	@Test
+	public void testAnimationtask() {
+		AnimationTask  tsk = new AnimationTask();
+		assertTrue("Up_0".equalsIgnoreCase(tsk.getName())); // default name is Up_0
+	}
+	@Test
+	public void testAnimationtaskForTypeDoor() {
+		AnimationTask  tsk = new AnimationTask("door");
+		assertFalse(tsk.isType()); // True : Move False: Door
+
+		tsk = new AnimationTask("Up_1");
+		assertTrue(tsk.isType()); // True : Move False: Door
+
+	}
 	@Test
 	public void testSetHasFutureWork() {
 		task.setHasFutureWork(true);
@@ -75,7 +91,8 @@ public class AnimationTaskTest {
 
 	@Test
 	public void testGetUniqueKey() {
-		assertTrue(task.getUniqueKey()==0); // it'll be 0 or more
+		System.out.println(task.getUniqueKey());
+		assertTrue(task.getUniqueKey()==key); // it'll be 0 or more
 	}
 
 	@Test
@@ -100,6 +117,11 @@ public class AnimationTaskTest {
 		assertEquals(0, task.getWorkList().size());// no work is assigned
 		task.setValuesForAnimation(work); // assigning the work
 		assertEquals(1, task.getWorkList().size()); // 1 work is assigned
+		work = new Work();
+		List<Work> list = task.getWorkList();
+		list.add(work); // 2nd object is added
+		task.setWorkList(list); // set this updated workList
+		assertEquals(2, task.getWorkList().size()); // 1 work is assigned
 		
 	}
 

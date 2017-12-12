@@ -22,15 +22,13 @@ public class DoorlmplTest {
 	@Test
 	public void testOpen() {
 		boolean OpenTest =  Door.open();
-		assertTrue(OpenTest);
-		assertTrue(!OpenTest == false);
+		assertFalse(OpenTest);
 	}
 
 	@Test
 	public void testClose() {
 		boolean CloseTest =  Door.close();
-		assertTrue(CloseTest == false);
-		assertTrue(!CloseTest);
+		assertTrue(CloseTest);
 	}
 
 }
