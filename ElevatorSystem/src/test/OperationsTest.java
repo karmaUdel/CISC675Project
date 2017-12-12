@@ -6,10 +6,10 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import operations.Operations;
+import operations.OperationImpl;
 
 public class OperationsTest {
-	static Operations operation;
+	static OperationImpl operation;
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 	}

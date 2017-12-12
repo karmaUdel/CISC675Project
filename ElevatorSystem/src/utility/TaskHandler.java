@@ -13,22 +13,19 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Worker;
 import javafx.concurrent.Worker.State;
 
-public class TaskHandler  implements Executor{
+public class TaskHandler {
 	//List<AnimationTask> list ;
-	private final Executor exec ;
 	ObservableList<AnimationTask> list;
 	public TaskHandler() {
 		// TODO Auto-generated constructor stub
 		super();
-		exec = null;
 		list = FXCollections.observableArrayList();//new ArrayList<AnimationTask>();
 	}
-	public TaskHandler(Executor exec) {
+	/*public TaskHandler(Executor exec) {
 		// TODO Auto-generated constructor stub
 		super();
-		this.exec = exec;
 		list = FXCollections.observableArrayList();//new ArrayList<AnimationTask>();
-	}
+	}*/
 	public AnimationTask getInstance(String name) {
 		//System.out.println("name : "+name);
 		//System.out.println(list);
@@ -67,7 +64,18 @@ public class TaskHandler  implements Executor{
 	public void terminateTask(AnimationTask task) {
 		list.remove(task);
 	}
-	@Override
+	
+	
+	/***
+	 * This not used
+	 * As there is bug in JavaFx concurrency 
+	 * Bug Number : https://bugs.openjdk.java.net/browse/JDK-8090517
+	 * Main can not be suspended to synchronize with child thread
+	 * Must use other way to do that which is to create dummy window to operate 
+	 * But this violates Layering principle
+	 */
+	/*@Override
+	@Deprecated
 	public void execute(Runnable command) {
 		// TODO Auto-generated method stub
 		if (command instanceof Worker) {
@@ -85,5 +93,5 @@ public class TaskHandler  implements Executor{
             list.add((AnimationTask)task);
         }
         exec.execute(command);
-	}
+	}*/
 }

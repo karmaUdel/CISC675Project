@@ -1,7 +1,13 @@
 package elevatorunit;
 
 public class LightImpl implements ILights {
-	int buttonLights[];
+	private int buttonLights[];
+	public int[] getButtonLights() {
+		return buttonLights;
+	}
+	public void setButtonLights(int[] buttonLights) {
+		this.buttonLights = buttonLights;
+	}
 	public LightImpl() {
 		// TODO Auto-generated constructor stub
 	}

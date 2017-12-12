@@ -26,16 +26,16 @@ import utility.ElevatorUtility;
  * @author Aditya
  *
  */
-public class Operations implements IOperation{
+public class OperationImpl implements IOperation{
 	
 	IScheduler scheduler ;// Scheduler object
 	ElevatorThread threads [];// Elevator Threads
 	ElevatorUtility util ;// TODO: Set of Constant Values
-	public Operations() {
+	public OperationImpl() {
 		super();
 		util = new ElevatorUtility();
 	}
-	public Operations(int numberOfFloors, int numberofElevators, int schedulingAlgo ) {
+	public OperationImpl(int numberOfFloors, int numberofElevators, int schedulingAlgo ) {
 		super();
 		// assigning appropriate Values
 		initiate(numberOfFloors, numberofElevators, schedulingAlgo);

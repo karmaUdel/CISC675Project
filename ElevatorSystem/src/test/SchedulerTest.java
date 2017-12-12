@@ -10,13 +10,13 @@ import java.util.Random;
 
 import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Assert;
+
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import elevatorunit.ElevatorThread;
-import scheduler.IScheduler;
+
 import scheduler.SchedulerImpl;
 
 /**
@@ -73,12 +73,12 @@ public class SchedulerTest {
 			elevators[i]= new ElevatorThread(0, -1, 0, 10);
 		}
 		scheduler.setElevators(elevators);
-		assertEquals(x, this.scheduler.getElevators().length); // Length is changed
+		assertEquals(x, SchedulerTest.scheduler.getElevators().length); // Length is changed
 	}
 	@Test
 	public void testSetElevatorsNull() {
 		scheduler.setElevators(null);
-		assertTrue(null == this.scheduler.getElevators()); // Length is null check
+		assertTrue(null == SchedulerTest.scheduler.getElevators()); // Length is null check
 	}
 	/**
 	 * Test method for {@link scheduler.SchedulerImpl#setSettings(elevatorunit.ElevatorThread[], int)}.
@@ -86,17 +86,17 @@ public class SchedulerTest {
 	@Test
 	public void testSetSettings0() {
 		scheduler.setSetting(0);
-		assertEquals(0, this.scheduler.getSetting()); // Length is changed
+		assertEquals(0, SchedulerTest.scheduler.getSetting()); // Length is changed
 	}
 	@Test
 	public void testSetSettingsPositive() {
 		scheduler.setSetting(rand.nextInt(100));
-		assertTrue(0 <this.scheduler.getSetting()); // Length is changed
+		assertTrue(0 <SchedulerTest.scheduler.getSetting()); // Length is changed
 	}
 	@Test
 	public void testSetSettingsNegative() {
 		scheduler.setSetting(-1 * rand.nextInt(100));
-		assertTrue(0 > this.scheduler.getSetting()); // Length is changed
+		assertTrue(0 > SchedulerTest.scheduler.getSetting()); // Length is changed
 	}
 	/**
 	 * We are very sure for the fact that all elevators are location floor = 0 

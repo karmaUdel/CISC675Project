@@ -4,5 +4,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.8.0_144"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="C:/Users/Aditya/.p2/pool/plugins/org.evosuite.plugins.eclipse.deps_1.0.5.201705151215/lib/evosuite.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Aditya/Downloads/clsvis-1.8.0/class-visualizer/clsvis.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

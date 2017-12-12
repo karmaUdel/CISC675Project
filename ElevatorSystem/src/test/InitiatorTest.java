@@ -79,9 +79,6 @@ public class InitiatorTest {
 		
 	}
 	
-	@Test
-	public void testInitiate() {
-		fail("Not yet implemented");
-	}
+	
 
 }

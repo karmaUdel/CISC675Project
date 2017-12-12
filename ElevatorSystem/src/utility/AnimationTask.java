@@ -26,6 +26,12 @@ public class AnimationTask extends Task<Integer> {
 	private double constant;
 	private boolean running = false;
 	private List<Work> workList ;
+	public List<Work> getWorkList() {
+		return workList;
+	}
+	public void setWorkList(List<Work> workList) {
+		this.workList = workList;
+	}
 	private boolean hasFutureWork = false;
 	
 	public boolean hasFutureWork() {
@@ -78,7 +84,6 @@ public class AnimationTask extends Task<Integer> {
 			consumeValuesForAnimation(workList.get(0));
 			travel();
 			setRunning( false);
-			workList.remove(0);
 			//System.out.println(workList.size());
 			//this.notifyAll();
 		}
@@ -110,6 +115,7 @@ public class AnimationTask extends Task<Integer> {
 		this.b = work.getB();
 		this.request = work.getRequest();
 		this.constant = work.getConstant();
+		this.workList.remove(work);
 	}
 	/**
 	 * Play the Animation

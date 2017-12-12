@@ -31,7 +31,7 @@ import javafx.stage.Stage;
  *
  */
 import operations.IOperation;
-import operations.Operations;
+import operations.OperationImpl;
 import utility.AnimationTask;
 import utility.TaskHandler;
 import utility.Work;
@@ -60,7 +60,7 @@ public class Gui extends Application{
 	public Gui () {
 		super();
 		this.algorithmSetting = 999;
-		operation = new Operations(10,5,999); //  use specialized Constructor
+		operation = new OperationImpl(10,5,999); //  use specialized Constructor
 		this.elevatornum = 5;
 		this.floornum = 10;
 		list.add(this);
@@ -74,7 +74,7 @@ public class Gui extends Application{
 	public Gui (int numberOfFloors,int numberOfElevators) {
 		super();
 		this.algorithmSetting = 999; // Default
-		operation = new Operations(numberOfFloors,numberOfElevators,this.algorithmSetting); //  use specialized Constructor
+		operation = new OperationImpl(numberOfFloors,numberOfElevators,this.algorithmSetting); //  use specialized Constructor
 		this.elevatornum = numberOfElevators;
 		this.floornum = numberOfFloors;
 		list.add(this);
@@ -89,7 +89,7 @@ public class Gui extends Application{
 	public Gui (int numberOfFloors,int numberOfElevators, int schedulingAlgo) {
 		super();
 		this.algorithmSetting = schedulingAlgo;
-		operation = new Operations(numberOfFloors,numberOfElevators,schedulingAlgo); //  use specialized Constructor
+		operation = new OperationImpl(numberOfFloors,numberOfElevators,schedulingAlgo); //  use specialized Constructor
 		this.elevatornum = numberOfElevators;
 		this.floornum = numberOfFloors;
 		list.add(this);

@@ -10,4 +10,5 @@ package elevatorunit;
 public interface IDoor {
 	public boolean open();
 	public boolean close();
+	public boolean operate();
 }

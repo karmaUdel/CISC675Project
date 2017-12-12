@@ -142,7 +142,7 @@ public class ElevatorThread extends Thread {
 	 * @return
 	 */
 	public boolean checkDoors() {
-		if(this.door.open()) {
+		if(this.door.operate()) {
 			return false;
 		}else {
 			return true;
@@ -151,11 +151,11 @@ public class ElevatorThread extends Thread {
 	/**
 	 * Close and Open door
 	 */
-	public void operateDoors() {
-		if(this.door.open()) {
-			this.door.close();
+	public boolean operateDoors() {
+		if(checkDoors()) {
+			return false;
 		}else {
-			this.door.open();
+			return true;
 		}
 	}
 }
